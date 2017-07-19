@@ -96,7 +96,7 @@ class admin_account_log extends ecjia_admin {
 		$user = get_user_info($user_id);
 		
 		$this->assign('ur_here', RC_Lang::get('user::account_log.account_list'));
-		$this->assign('action_link', array('text' => RC_Lang::get('user::account_log.add_account'), 'href' => RC_Uri::url('user/admin_account_log/edit', array('user_id' => $user_id))));
+		$this->assign('action_link', array('text' => RC_Lang::get('user::account_log.add_account'), 'href' => RC_Uri::url('finance/admin_account_log/edit', array('user_id' => $user_id))));
 		
 		if (empty($_REQUEST['account_type']) || !in_array($_REQUEST['account_type'], array('user_money', 'frozen_money', 'rank_points', 'pay_points'))) {
 			$account_type = '';
@@ -108,7 +108,7 @@ class admin_account_log extends ecjia_admin {
 		$this->assign('user',			$user);
 		$this->assign('account_type',	$account_type);
 		$this->assign('account_list',	$account_list);
-		$this->assign('form_action',	RC_Uri::url('user/admin_account_log/init', array('user_id' => $user_id)));
+		$this->assign('form_action',	RC_Uri::url('finance/admin_account_log/init', array('user_id' => $user_id)));
 
 		$this->display('account_log_list.dwt');
 	}
@@ -130,7 +130,7 @@ class admin_account_log extends ecjia_admin {
 			'<p>' . __('<a href="https://ecjia.com/wiki/帮助:ECJia智能后台:会员列表#.E6.9F.A5.E7.9C.8B.E8.B4.A6.E7.9B.AE.E6.98.8E.E7.BB.86" target="_blank">'.RC_Lang::get('user::users.about_add_account_log').'</a>') . '</p>'
 		);
 		
-		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::account_log.account_change_desc'), RC_Uri::url('user/admin_account_log/init', 'user_id='.$user_id)));
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::account_log.account_change_desc'), RC_Uri::url('finance/admin_account_log/init', 'user_id='.$user_id)));
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::account_log.add_account')));
 		
 		$user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
@@ -139,8 +139,8 @@ class admin_account_log extends ecjia_admin {
 		/* 显示模板 */
 		$this->assign('user',			$user);
 		$this->assign('ur_here',		RC_Lang::get('user::account_log.add_account'));
-		$this->assign('action_link',	array('href' => RC_Uri::url('user/admin_account_log/init', array('user_id' => $user_id)), 'text' => RC_Lang::get('user::account_log.account_list')));
-		$this->assign('form_action',	RC_Uri::url('user/admin_account_log/update', array('user_id' => $user_id)));
+		$this->assign('action_link',	array('href' => RC_Uri::url('finance/admin_account_log/init', array('user_id' => $user_id)), 'text' => RC_Lang::get('user::account_log.account_list')));
+		$this->assign('form_action',	RC_Uri::url('finance/admin_account_log/update', array('user_id' => $user_id)));
 		
 		$this->display('account_log_edit.dwt');
 	}
@@ -220,8 +220,8 @@ class admin_account_log extends ecjia_admin {
 			RC_Lang::get('user::account_log.paypoints').$paypoints.$pay_points.'，'.
 			RC_Lang::get('user::account_log.change_desc').$change_desc, 'edit', 'usermoney');
 		
-		$links[] = array('href' => RC_Uri::url('user/admin_account_log/init', array('user_id' => $user_id)), 'text' => RC_Lang::get('user::account_log.account_list'));
-		return $this->showmessage(RC_Lang::get('user::account_log.log_account_change_ok'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('user/admin_account_log/edit', array('user_id' => $user_id)), 'links' => $links));
+		$links[] = array('href' => RC_Uri::url('finance/admin_account_log/init', array('user_id' => $user_id)), 'text' => RC_Lang::get('user::account_log.account_list'));
+		return $this->showmessage(RC_Lang::get('user::account_log.log_account_change_ok'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('finance/admin_account_log/edit', array('user_id' => $user_id)), 'links' => $links));
 	}
 }
 
