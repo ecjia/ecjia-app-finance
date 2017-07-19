@@ -47,21 +47,78 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 后台权限API
- * @author songqianqian
- */
-class finance_admin_purview_api extends Component_Event_Api {
-    
-    public function call(&$options) {
-        $purviews = array(
-        		
-			array('action_name' => RC_Lang::get('user::users.account_manage'), 		'action_code' => 'account_manage', 	'relevance' => ''),
-			array('action_name' => RC_Lang::get('user::users.surplus_manage'), 		'action_code' => 'surplus_manage', 	'relevance' => 'account_manage'),
-        	array('action_name' => '发票管理', 		'action_code' => 'invoice_manage', 	'relevance' => ''),
-			
-        );
-        return $purviews;
-    }
+ * ECJIA 发票管理
+*/
+class admin_invoice extends ecjia_admin {
+
+	public function __construct() {
+		parent::__construct();
+		
+		RC_Script::enqueue_script('jquery-validate');
+		RC_Script::enqueue_script('jquery-form');
+		RC_Script::enqueue_script('smoke');
+		RC_Script::enqueue_script('jquery-chosen');
+		RC_Style::enqueue_style('chosen');
+		RC_Script::enqueue_script('jquery-uniform');
+		RC_Style::enqueue_style('uniform-aristo');
+		
+		RC_Script::enqueue_script('invoice', RC_App::apps_url('statics/js/invoice.js', __FILE__));
+
+	}
+
+	/**
+	 * 充值提现申请列表
+	 */
+	public function init() {
+		$this->admin_priv('invoice_manage');
+				
+		ecjia_screen::get_current_screen()->remove_last_nav_here();
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('发票列表'));
+
+		$this->assign('ur_here','发票列表');
+		$this->assign('form_action',	RC_Uri::url('finance/admin_invoice/init'));
+		
+		$invoice_list = $this->get_invoice_list();
+		$this->assign('invoice_list', $invoice_list);
+		
+		$this->display('admin_invoice_list.dwt');
+	}
+	
+	/**
+	 * 申诉-列表信息
+	 */
+	private function get_invoice_list() {
+		$db_invoice = RC_DB::table('finance_invoice');
+
+		$filter['keywords'] = empty($_GET['keywords']) ? '' : trim($_GET['keywords']);
+		if ($filter['keywords']) {
+			$db_invoice->where('title_name', 'like', '%' . mysql_like_quote($filter['keywords']) . '%');
+		}
+		$count = $db_invoice->count();	
+		$page = new ecjia_page($count, 10, 5);
+		
+		$data = $db_invoice
+		->selectRaw('id,user_id,title_name,title_type,user_mobile,tax_register_no,add_time')
+		->orderby(RC_DB::Raw('id'), 'desc')
+		->take(10)
+		->skip($page->start_id-1)
+		->get();
+	
+		$list = array();
+		if (!empty($data)) {
+			foreach ($data as $row) {
+				if($row['title_type'] == 'PERSONAL'){
+					$row['title_type_name'] = '个人';
+				}elseif ($row['title_type'] == 'CORPORATION'){
+					$row['title_type_name'] = '单位';
+				}
+				$row['add_time']  = RC_Time::local_date('Y-m-d H:i', $row['add_time']);
+				$list[] = $row;
+			}
+		}
+	
+		return array('list' => $list, 'filter' => $filter, 'page' => $page->show(2), 'desc' => $page->page_desc());
+	}
 }
 
 // end
