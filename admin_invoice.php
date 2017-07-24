@@ -112,6 +112,7 @@ class admin_invoice extends ecjia_admin {
 				}elseif ($row['title_type'] == 'CORPORATION'){
 					$row['title_type_name'] = '单位';
 				}
+				$row['user_name'] = RC_DB::TABLE('users')->where('user_id', $row['user_id'])->pluck('user_name');
 				$row['add_time']  = RC_Time::local_date('Y-m-d H:i', $row['add_time']);
 				$list[] = $row;
 			}

@@ -43,7 +43,10 @@
 			<tbody>
 				<!-- {foreach from=$invoice_list.list item=item}-->
 				<tr>
-					<td>{$item.user_id}</td>
+					<td>
+						{$item.user_id}
+						<a class="data-pjax no-underline" href='{url path="user/admin/info" args="id={$item.user_id}"}'>（{$item.user_name}）</a>
+					</td>
 					<td>{$item.title_name}</td>
 					<td>{$item.title_type_name}</td>
 					<td>{$item.tax_register_no}</td>
