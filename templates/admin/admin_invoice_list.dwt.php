@@ -31,7 +31,7 @@
 		<table class="table table-striped" id="smpl_tbl">
 			<thead>
 				<tr>
-					<th class="w150">用户id</th>
+					<th class="w150">会员名称</th>
 					<th>抬头名称</th>
 					<th class="w100">抬头类型</th>
 					<th class="w150">纳税人识别号</th>
@@ -44,8 +44,7 @@
 				<!-- {foreach from=$invoice_list.list item=item}-->
 				<tr>
 					<td>
-						{$item.user_id}
-						<a class="data-pjax no-underline" href='{url path="user/admin/info" args="id={$item.user_id}"}'>（{$item.user_name}）</a>
+						<a class="no-underline" target="_blank" href='{url path="user/admin/info" args="id={$item.user_id}"}'>{$item.user_name}</a>
 					</td>
 					<td>{$item.title_name}</td>
 					<td>{$item.title_type_name}</td>
