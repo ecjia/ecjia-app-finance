@@ -37,7 +37,7 @@
 					<th class="w150">纳税人识别号</th>
 					<th class="w100">电话号码</th>
 					<th class="w150">添加时间</th>
-					
+					<th class="w100">操作</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -51,6 +51,11 @@
 					<td>{$item.tax_register_no}</td>
 					<td>{$item.user_mobile}</td>
 					<td>{$item.add_time}</td>
+					<td>
+						<a style="cursor:pointer;"  class="data-pjax" 
+							href='{RC_Uri::url("finance/admin_invoice/info", "id={$item.id}")}'>详细信息
+						</a>
+					</td>
 				</tr>
 				<!-- {foreachelse}-->
 				<tr><td class="no-records" colspan="6">{lang key='system::system.no_records'}</td></tr>

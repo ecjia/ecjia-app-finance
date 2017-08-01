@@ -63,11 +63,13 @@ class admin_invoice extends ecjia_admin {
 		RC_Style::enqueue_style('uniform-aristo');
 		
 		RC_Script::enqueue_script('invoice', RC_App::apps_url('statics/js/invoice.js', __FILE__));
+		
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('发票列表', RC_Uri::url('finance/admin_invoice/init')));
 
 	}
 
 	/**
-	 * 充值提现申请列表
+	 * 发票列表
 	 */
 	public function init() {
 		$this->admin_priv('invoice_manage');
@@ -82,6 +84,26 @@ class admin_invoice extends ecjia_admin {
 		$this->assign('invoice_list', $invoice_list);
 		
 		$this->display('admin_invoice_list.dwt');
+	}
+	
+	/**
+	 * 发票详情
+	 */
+	public function info() {
+		$this->admin_priv('invoice_manage');
+	
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('发票详情'));
+		$this->assign('action_link',	array('text' => '发票列表', 'href' => RC_Uri::url('finance/admin_invoice/init')));
+		$this->assign('ur_here','发票详情');
+		$id = intval($_GET['id']);
+		
+		$invoice_info = RC_DB::table('finance_invoice')->where('id', $id)->first();
+		$invoice_info['add_time'] = RC_Time::local_date(ecjia::config('time_format'), $invoice_info['add_time']);
+		$invoice_info['update_time'] = RC_Time::local_date(ecjia::config('time_format'), $invoice_info['update_time']);
+		$invoice_info['user_name'] = RC_DB::TABLE('users')->where('user_id', $invoice_info['user_id'])->pluck('user_name');
+	    $this->assign('invoice_info',$invoice_info);
+		
+		$this->display('admin_invoice_info.dwt');
 	}
 	
 	/**
