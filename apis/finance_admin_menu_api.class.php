@@ -62,7 +62,11 @@ class finance_admin_menu_api extends Component_Event_Api {
         	ecjia_admin::make_admin_menu('03_invoice', '发票列表', RC_Uri::url('finance/admin_invoice/init'), 3)->add_purview('invoice_manage'),
         );
         $menus->add_submenu($submenus);
-        return $menus;
+        $menus = RC_Hook::apply_filters('finance_admin_menu_api', $menus);
+        if ($menus->has_submenus()) {
+            return $menus;
+        }
+        return false;
     }
 }
 
