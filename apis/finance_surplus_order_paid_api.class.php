@@ -78,9 +78,10 @@ class finance_surplus_order_paid_api extends Component_Event_Api {
 	 * @return  void
 	 */
 	private function order_paid($order_sn, $pay_status = PS_PAYED) {
-	    $res_id = RC_DB::table('user_account')->select('id')->where('order_sn', $order_sn)->where('is_paid', 1)->first();
+	    /* 取得添加预付款的用户以及金额 */
+	    $res = RC_DB::table('user_account')->select('id', 'user_id', 'order_sn', 'amount', 'is_paid')->where('order_sn', $order_sn)->first();
 	    
-	    if (empty($res_id)) {
+	    if (empty($res['is_paid'])) {
 	        /* 更新会员预付款的到款状态 */
 	        $data = array(
 	            'paid_time' => RC_Time::gmtime(),
@@ -88,13 +89,13 @@ class finance_surplus_order_paid_api extends Component_Event_Api {
 	        );
 	        RC_DB::table('user_account')->where('order_sn', $order_sn)->update($data);
 	    
-	        /* 取得添加预付款的用户以及金额 */
-	        $arr = RC_DB::table('user_account')->select('user_id', 'order_sn', 'amount')->where('order_sn', $order_sn)->first();
+	        
+// 	        $arr = RC_DB::table('user_account')->select('user_id', 'order_sn', 'amount')->where('order_sn', $order_sn)->first();
 	    
 	        /* 修改会员帐户金额 */
 	        $options = array(
-	            'user_id'		=> $arr['user_id'],
-	            'user_money'	=> $arr['amount'],
+	            'user_id'		=> $res['user_id'],
+	            'user_money'	=> $res['amount'],
 	            'change_desc'	=> RC_Lang::get('orders::order.surplus_type_0'),
 	            'change_type'	=> ACT_SAVING
 	        );
