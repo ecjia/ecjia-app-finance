@@ -68,6 +68,7 @@
 			<thead>
 				<tr>
 					<th class="table_checkbox"><input type="checkbox" data-toggle="selectall" data-children=".checkbox"/></th>
+					<th>{lang key='user::user_account.order_sn'}</th>
 					<th>{lang key='user::user_account.user_id'}</th>
 					<th>{lang key='user::user_account.surplus_amount'}</th>
 					<th class="w110">{lang key='user::user_account.pay_mothed'}</th>
@@ -87,6 +88,7 @@
 						<input type="checkbox" value="{$item.id}" disabled="disabled" />
 						<!-- {/if} -->
 					</td>
+					<td>{$item.order_sn}</td>
 					<td>{if $item.user_name}{$item.user_name}{else}{lang key='user::user_account.no_user'}{/if}</td>
 					<td align="right">{$item.surplus_amount}</td>
 					<td>{if $item.payment}{$item.payment}{/if}</td>
