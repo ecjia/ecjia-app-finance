@@ -117,6 +117,9 @@ function get_account_list($args = array()) {
 
 	$filter['sort_by']		= empty($_REQUEST['sort_by'])		? 'add_time'                    : trim($_REQUEST['sort_by']);
 	$filter['sort_order']	= empty($_REQUEST['sort_order'])	? 'DESC'                        : trim($_REQUEST['sort_order']);
+	
+	$filter['type']			= empty($args['type'])				? ''                            : $args['type'];
+	
 	$db_user_account = RC_DB::table('user_account as ua')->leftJoin('users as u', RC_DB::raw('ua.user_id'), '=', RC_DB::raw('u.user_id'));
 	
 	if ($filter['user_id'] > 0) {
@@ -125,6 +128,11 @@ function get_account_list($args = array()) {
 	if ($filter['process_type'] != -1) {
 		$db_user_account->where(RC_DB::raw('process_type'), $filter['process_type']);
 	} 
+	if ($filter['type'] == 'recharge') {
+		$db_user_account->where(RC_DB::raw('process_type'), 0);
+	} elseif ($filter['type'] == 'withdraw') {
+		$db_user_account->where(RC_DB::raw('process_type'), 1);
+	}
 	if ($filter['payment']) {
 		$payment = $payment_method->payment_info_by_name($filter['payment']);
 

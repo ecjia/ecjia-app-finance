@@ -36,11 +36,6 @@
 		</div>
 		
 		<div class="choose_list f_r m_t10">
-			<select class="w80" name="process_type">
-			<option value="-1" >{lang key='user::user_account.process_type'}</option>
-			<option value="0" {if $list.filter.process_type eq 0} selected="selected" {/if}>{lang key='user::user_account.surplus_type.0'}</option>
-			<option value="1" {if $smarty.get.process_type eq 1} selected="selected" {/if} >{lang key='user::user_account.surplus_type.1'}</option>
-			</select>
 			<select class="w120" name="payment">
 				<option value="">{lang key='user::user_account.pay_mothed'}</option>
 				<!-- {foreach from=$payment item=item} -->
@@ -88,7 +83,7 @@
 						<input type="checkbox" value="{$item.id}" disabled="disabled" />
 						<!-- {/if} -->
 					</td>
-					<td>{$item.order_sn}</td>
+					<td><a target="_blank" href='{url path="/finance/admin_account/info" args="order_sn={$item.order_sn}&id={$item.id}{if $type}&type={$type}{/if}"}'>{$item.order_sn}</a></td>
 					<td>{if $item.user_name}{$item.user_name}{else}{lang key='user::user_account.no_user'}{/if}</td>
 					<td align="right">{$item.surplus_amount}</td>
 					<td>{if $item.payment}{$item.payment}{/if}</td>
@@ -97,10 +92,10 @@
 					<td align="center">{$item.add_date}</td>
 					<td align="center">
 						<!-- {if $item.is_paid eq 1} -->
-						<a class="data-pjax no-underline" href='{url path="finance/admin_account/edit" args="id={$item.id}"}' title="{lang key='system::system.edit'}"><i class="fontello-icon-edit"></i></a>
+						<a class="data-pjax no-underline" href='{url path="finance/admin_account/edit" args="id={$item.id}{if $type}&type={$type}{/if}"}' title="{lang key='system::system.edit'}"><i class="fontello-icon-edit"></i></a>
 						<!-- {else} -->
-						<a class="data-pjax no-underline" href='{url path="finance/admin_account/check" args="id={$item.id}"}' title="{lang key='user::user_account.check'}" ><i class="fontello-icon-doc-text"></i></a>
-						<a class="ajaxremove no-underline" data-toggle="ajaxremove" data-msg="{lang key='user::user_account.delete_surplus_confirm'}" href='{url path="finance/admin_account/remove" args="id={$item.id}"}' title="{lang key='user::user_account.delete'}"><i class="fontello-icon-trash"></i></a>
+						<a class="data-pjax no-underline" href='{url path="finance/admin_account/check" args="id={$item.id}{if $type}&type={$type}{/if}"}' title="{lang key='user::user_account.check'}" ><i class="fontello-icon-doc-text"></i></a>
+						<a class="ajaxremove no-underline" data-toggle="ajaxremove" data-msg="{lang key='user::user_account.delete_surplus_confirm'}" href='{url path="finance/admin_account/remove" args="id={$item.id}{if $type}&type={$type}{/if}"}' title="{lang key='user::user_account.delete'}"><i class="fontello-icon-trash"></i></a>
 						<!-- {/if} -->
 					</td>
 				</tr>

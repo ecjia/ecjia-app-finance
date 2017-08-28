@@ -108,11 +108,13 @@ class admin_account extends ecjia_admin {
 		
 		$user_id = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
 		$payment = get_payment();
+		
 		$list = get_account_list($_REQUEST);
-
-		$this->assign('id',				$user_id);
-		$this->assign('payment',		$payment);
-		$this->assign('list',			$list);
+		
+		$this->assign('type',		$_GET['type']);
+		$this->assign('id',			$user_id);
+		$this->assign('payment',	$payment);
+		$this->assign('list',		$list);
 		
 		$this->assign('form_action',	RC_Uri::url('finance/admin_account/init'));
 		$this->assign('batch_action',	RC_Uri::url('finance/admin_account/batch_remove'));
@@ -274,7 +276,7 @@ class admin_account extends ecjia_admin {
 		);
 		
 		$this->assign('ur_here', RC_Lang::get('user::user_account.surplus_edit'));
-		$this->assign('action_link', array('text' => RC_Lang::get('user::user_account.recharge_withdrawal_apply'), 'href' => RC_Uri::url('finance/admin_account/init')));
+		$this->assign('action_link', array('text' => RC_Lang::get('user::user_account.recharge_withdrawal_apply'), 'href' => RC_Uri::url('finance/admin_account/init'), array('type'=> $_GET['type'])));
 		
 		$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 	
@@ -293,6 +295,7 @@ class admin_account extends ecjia_admin {
 		$this->assign('surplus', $account);
 		$this->assign('user_name', $user_name);
 		$this->assign('id', $id);
+		$this->assign('type',  $_GET['type']);
 		
 		$this->assign('form_action', RC_Uri::url('finance/admin_account/update'));
 
@@ -328,7 +331,7 @@ class admin_account extends ecjia_admin {
 		
 		ecjia_admin::admin_log(RC_Lang::get('user::user_account.log_username').$user_name.','.$account.$info['amount'], 'edit', 'user_account');
 		$links[0]['text'] = RC_Lang::get('user::user_account.back_list');
-		$links[0]['href'] = RC_Uri::url('finance/admin_account/init');
+		$links[0]['href'] = RC_Uri::url('finance/admin_account/init', array('type' => $_POST['type']));
 		return $this->showmessage(RC_Lang::get('user::user_account.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links));
 	}
 	
@@ -340,7 +343,7 @@ class admin_account extends ecjia_admin {
 	
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account.check')));
 		$this->assign('ur_here', RC_Lang::get('user::user_account.check'));
-		$this->assign('action_link', array('text' => RC_Lang::get('system::system.09_user_account'), 'href' => RC_Uri::url('finance/admin_account/init')));
+		$this->assign('action_link', array('text' => RC_Lang::get('system::system.09_user_account'), 'href' => RC_Uri::url('finance/admin_account/init'), array('type' => $_GET['type'])));
 				
 		$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
@@ -362,7 +365,8 @@ class admin_account extends ecjia_admin {
 		$this->assign('id',				$id);
 		$this->assign('check_action',	RC_Uri::url('finance/admin_account/action'));
 		$this->assign('is_check',		1);
-
+		$this->assign('type',  $_GET['type']);
+		
 		$this->display('admin_account_check.dwt');
 	}
 	
@@ -377,7 +381,7 @@ class admin_account extends ecjia_admin {
 		$id			= isset($_POST['id'])			? intval($_POST['id'])			: 0;
 		$is_paid	= isset($_POST['is_paid'])		? intval($_POST['is_paid'])		: 0;
 		$admin_note	= isset($_POST['admin_note'])	? trim($_POST['admin_note'])	: '';
-
+		
 		/* 查询当前的预付款信息 */
 		$account	= array();
 		$account	= RC_DB::table('user_account')->where('id', $id)->first();
@@ -418,7 +422,7 @@ class admin_account extends ecjia_admin {
 		ecjia_admin::admin_log('(' . addslashes(RC_Lang::get('user::user_account.check')) . ')' . $admin_note, 'check', 'user_surplus');
 		
 		$links[0]['text'] = RC_Lang::get('user::user_account.back_list');
-		$links[0]['href'] = RC_Uri::url('finance/admin_account/init');
+		$links[0]['href'] = RC_Uri::url('finance/admin_account/init', array('type'=> $_POST['type']));
 		return $this->showmessage(RC_Lang::get('user::user_account.attradd_succed'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links));
 	}
 	
@@ -472,6 +476,34 @@ class admin_account extends ecjia_admin {
 		} else {
 			return $this->showmessage(RC_Lang::get('user::user_account.select_operate_item'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
+	}
+	
+	/**
+	 * 充值提现详情
+	 */
+	public function info() {
+		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('订单详情'));
+		$this->assign('ur_here', '订单详情');
+		$this->assign('action_link', array('text' => '充值提现申请', 'href' => RC_Uri::url('finance/admin_account/init', array('type' => $_GET['type']))));
+		
+		$order_sn = isset($_GET['order_sn']) ? $_GET['order_sn'] : '';
+		$id = isset($_GET['id']) ? $_GET['id'] : 0;
+		
+		$account_info 				= RC_DB::table('user_account')->where('order_sn', $order_sn)->first();
+		$account_info['user_name']  = RC_DB::table('users')->where('user_id', $account_info['user_id'])->pluck('user_name');
+		$account_info['pay_name'] 	= RC_DB::table('payment')->where('pay_code', $account_info['payment'])->pluck('pay_name');
+		$account_info['amount']		= abs($account_info['amount']);
+		$account_info['user_note']	= htmlspecialchars($account_info['user_note']);
+		$account_info['add_time']   = RC_Time::local_date(ecjia::config('time_format'), $account_info['add_time']);
+		
+		$this->assign('check_action',	RC_Uri::url('finance/admin_account/action'));
+		$this->assign('form_action', RC_Uri::url('finance/admin_account/update'));
+		
+		$this->assign('account_info',  $account_info);
+		$this->assign('order_sn',  $order_sn);
+		$this->assign('id',  $id);
+		$this->assign('type',  $_GET['type']);
+		$this->display('admin_account_info.dwt');
 	}
 }
 
