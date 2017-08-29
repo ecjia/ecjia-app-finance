@@ -17,6 +17,31 @@
 	</h3>
 </div>
 
+<div class="order-status-base m_b20">
+	<ul class="">
+		<li class="step-first">
+			<div class="{if $is_paid neq '1'}step-cur{else}step-done{/if}">
+				<div class="step-no">{if $account_info.is_paid neq '1'}1{/if}</div>
+				<div class="m_t5">{if $account_info.is_paid neq '1'}未确认{else}已确认{/if}</div>
+				<div class="m_t5 ecjiafc-blue">{$account_info.add_time}</div>
+			</div>
+		</li>
+		<li>
+			<div class="{if $is_paid eq '1'}step-done{/if}">
+				<div class="step-no">2</div>
+				<div class="m_t5">{if $account_info.is_paid eq '1'}已付款{else}未付款{/if}</div>
+				<div class="m_t5 ecjiafc-blue">{$account_info.pay_time}</div>
+			</div>
+		</li>
+		<li class="step-last">
+			<div class="{if $is_paid eq '1'}step-cur{else}step-done{/if}">
+				<div class="step-no">3</div>
+				<div class="m_t5">{if $account_info.is_paid eq '1'}已完成{elseif $account_info.is_paid eq '2'}已取消{else}未完成{/if}</div>
+			</div>
+		</li>
+	</ul>
+</div>
+
 <div class="row-fluid">
 	<div class="span12">
 		<div class="accordion-group">
@@ -51,14 +76,16 @@
 							</td>
 							<td><div align="right"><strong>{lang key='user::user_account.label_pay_mothed'}</strong></div></td>
 							<td>
-								<!-- {if $account_info.payment} -->
-								{$account_info.payment}
+								<!-- {if $account_info.pay_name} -->
+								{$account_info.pay_name}
 								<!-- {/if} -->
 							</td>
 						</tr>
 						<tr>
 							<td><div align="right"><strong>申请时间</strong></div></td>
-							<td colspan="3">{$account_info.add_time}</td>
+							<td>{$account_info.add_time}</td>
+							<td><div align="right"><strong>订单编号</strong></div></td>
+							<td>{$account_info.order_sn}</td>
 						</tr>
 						<!-- {if $is_check} -->
 						<tr>

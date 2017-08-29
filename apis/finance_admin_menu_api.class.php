@@ -58,7 +58,7 @@ class finance_admin_menu_api extends Component_Event_Api {
         $menus = ecjia_admin::make_admin_menu('05_finance', '财务管理', '', 6);
         $submenus = array(
             ecjia_admin::make_admin_menu('01_account_manage', '资金管理', RC_Uri::url('finance/admin_account_manage/init'), 1)->add_purview('account_manage'),
-        	ecjia_admin::make_admin_menu('02_account', '充值申请', RC_Uri::url('finance/admin_account/init', array('type' => 'recharge')), 2)->add_purview('surplus_manage'),
+        	ecjia_admin::make_admin_menu('02_account', '充值订单', RC_Uri::url('finance/admin_account/init', array('type' => 'recharge')), 2)->add_purview('surplus_manage'),
         	ecjia_admin::make_admin_menu('02_account', '提现申请', RC_Uri::url('finance/admin_account/init', array('type' => 'withdraw')), 3)->add_purview('surplus_manage'),
         	ecjia_admin::make_admin_menu('03_invoice', '发票列表', RC_Uri::url('finance/admin_invoice/init'), 4)->add_purview('invoice_manage'),
         );

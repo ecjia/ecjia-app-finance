@@ -74,6 +74,8 @@ class admin_account extends ecjia_admin {
 		RC_Style::enqueue_style('uniform-aristo');
 		RC_Script::enqueue_script('admin_account', RC_App::apps_url('statics/js/admin_account.js', __FILE__));
 		
+		RC_Style::enqueue_style('orders', RC_App::apps_url('statics/css/admin_finance.css', __FILE__), array());
+		
 		$account_jslang = array(
 			'keywords_required'			=> RC_Lang::get('user::user_account.keywords_required'),
 			'username_required'			=> RC_Lang::get('user::user_account.username_required'),
@@ -343,7 +345,7 @@ class admin_account extends ecjia_admin {
 	
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account.check')));
 		$this->assign('ur_here', RC_Lang::get('user::user_account.check'));
-		$this->assign('action_link', array('text' => RC_Lang::get('system::system.09_user_account'), 'href' => RC_Uri::url('finance/admin_account/init'), array('type' => $_GET['type'])));
+		$this->assign('action_link', array('text' => RC_Lang::get('system::system.09_user_account'), 'href' => RC_Uri::url('finance/admin_account/init', array('type' => $_GET['type']))));
 				
 		$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
@@ -495,6 +497,18 @@ class admin_account extends ecjia_admin {
 		$account_info['amount']		= abs($account_info['amount']);
 		$account_info['user_note']	= htmlspecialchars($account_info['user_note']);
 		$account_info['add_time']   = RC_Time::local_date(ecjia::config('time_format'), $account_info['add_time']);
+		$account_info['pay_time']   = RC_Time::local_date(ecjia::config('time_format'), $account_info['pay_time']);
+		
+		//订单流程状态
+		//$time_key = 1;
+		if ($account_info['is_paid'] == 0) {
+			$is_paid = 0;
+		}elseif ($account_info['is_paid'] == 1) {
+				$is_paid = 1;
+		} elseif($account_info['is_paid'] == 2) {
+				$is_paid = 2;
+		}
+		$this->assign('is_paid', $is_paid);
 		
 		$this->assign('check_action',	RC_Uri::url('finance/admin_account/action'));
 		$this->assign('form_action', RC_Uri::url('finance/admin_account/update'));
