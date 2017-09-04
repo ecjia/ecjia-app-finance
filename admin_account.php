@@ -157,8 +157,7 @@ class admin_account extends ecjia_admin {
 	 * 添加充值提现申请
 	 */
 	public function insert() {
-		/* 权限判断 */
-		$this->admin_priv('surplus_manage', ecjia::MSGTYPE_JSON);
+		$this->admin_priv('surplus_manage');
 		
 		/* 初始化变量 */
 		$id				= isset($_POST['id'])				? intval($_POST['id'])				: 0;
@@ -212,10 +211,11 @@ class admin_account extends ecjia_admin {
 			'is_paid'		=> $is_paid,
 		);
 		if ($is_paid == 1) {
-			$data['pay_time']		= RC_Time::gmtime();
+			$data['paid_time']		= RC_Time::gmtime();
 		}
 		
-		RC_DB::table('user_account')->insert($data);
+		
+		RC_DB::table('user_account')->insertGetId($data);
 		
 		/* 更新会员余额数量 */
 		if ($is_paid == 1) {
@@ -497,7 +497,7 @@ class admin_account extends ecjia_admin {
 		$account_info['amount']		= abs($account_info['amount']);
 		$account_info['user_note']	= htmlspecialchars($account_info['user_note']);
 		$account_info['add_time']   = RC_Time::local_date(ecjia::config('time_format'), $account_info['add_time']);
-		$account_info['pay_time']   = RC_Time::local_date(ecjia::config('time_format'), $account_info['pay_time']);
+		$account_info['pay_time']   = RC_Time::local_date(ecjia::config('time_format'), $account_info['paid_time']);
 		
 		//订单流程状态
 		//$time_key = 1;
