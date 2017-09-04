@@ -216,7 +216,6 @@ class admin_account extends ecjia_admin {
 		
 		
 		RC_DB::table('user_account')->insertGetId($data);
-		
 		/* 更新会员余额数量 */
 		if ($is_paid == 1) {
 			$change_desc = $amount > 0 ? RC_Lang::get('user::user_account.surplus_type.0') : RC_Lang::get('user::user_account.surplus_type.1');
@@ -241,7 +240,7 @@ class admin_account extends ecjia_admin {
 				'order_type'	=> PAY_SURPLUS,
 				'is_paid'		=> 0,
 			);
-			RC_DB::table('pay_log')->insert($data);
+			RC_DB::table('pay_log')->insertGetId($data);
 		}
 		if ($process_type == 0) {
 			$account = RC_Lang::get('user::user_account.deposit');

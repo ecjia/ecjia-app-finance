@@ -99,22 +99,21 @@ class finance_surplus_order_paid_api extends Component_Event_Api {
 	        RC_Api::api('finance', 'account_change_log', $options);
 	    }
 
-        /* @todo 客户余额充值付款短信提醒 */
-//         if (!empty($staff_user['mobile'])) {
-//             $options = array(
-//                 'mobile' => $staff_user['mobile'],
-//                 'event'	 => 'sms_order_payed',
-//                 'value'  =>array(
-//                     'order_sn'  	=> $order['order_sn'],
-//                     'consignee' 	=> $order['consignee'],
-//                     'telephone'  	=> $order['mobile'],
-//                     'order_amount'	=> $order['order_amount'],
-//                     'service_phone' => ecjia::config('service_phone'),
-//                 ),
-//             );
-//             RC_Api::api('sms', 'send_event_sms', $options);
-//         }
-
+        /* 客户余额充值付款短信提醒 */
+	    $user_info = RC_DB::table('users')->where('user_id', $res['user_id'])->select('user_name', 'user_money', 'mobile_phone')->first();
+        if (!empty($user_info['mobile_phone'])) {
+            $options = array(
+                'mobile' => $user_info['mobile'],
+                'event'	 => 'sms_user_account_change',
+                'value'  =>array(
+                  	'user_name' 	=> $user_info['user_name'],
+        			'amount' 		=> $res['amount'],
+        			'user_money' 	=> $user_info['user_money'],
+        			'service_phone' => ecjia::config('service_phone'),
+                ),
+            );
+            RC_Api::api('sms', 'send_event_sms', $options);
+        }
     }
 }
 
