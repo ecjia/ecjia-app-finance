@@ -44,3 +44,11 @@
 .order-status-base .step-last .step-cur .step-no {
 	background-position: 50% -69px;
 }
+
+
+.username{
+	display:none;
+}
+.userinfo{
+	padding:4px 6px;
+}
