@@ -228,12 +228,10 @@ class admin_account extends ecjia_admin {
 		}
 		
 		/*金额必须为1元起*/
-		if ($process_type == 0) {
-			if ($amount <= 1) {
-				return $this->showmessage(RC_Lang::get('user::user_account.min_amount_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-			}
+		if ($amount < 1) {
+			return $this->showmessage(RC_Lang::get('user::user_account.min_amount_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 		}
-		
+	
 		$order_sn = $this->get_order_sn();
 		
 		$data = array(
@@ -258,7 +256,7 @@ class admin_account extends ecjia_admin {
 		if ($is_paid == 1) {
 			$change_desc = $amount > 0 ? RC_Lang::get('user::user_account.surplus_type.0') : RC_Lang::get('user::user_account.surplus_type.1');
 			$change_type = $amount > 0 ? ACT_SAVING : ACT_DRAWING;
-			change_account_log($user_id , $amount , 0 , 0 , 0 , $change_desc , $change_type);
+			change_account_log($user_info['user_id'] , $amount , 0 , 0 , 0 , $change_desc , $change_type);
 		}
 		
 		/* 如果是预付款并且未确认，向pay_log插入一条记录 */
