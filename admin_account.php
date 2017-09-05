@@ -128,17 +128,26 @@ class admin_account extends ecjia_admin {
 		
 		$this->assign('action_link',	array('text' => RC_Lang::get('user::user_account.surplus_add'), 'href' => RC_Uri::url('finance/admin_account/add', array('type' => $type))));
 		
-		$user_id = !empty($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
-		$payment = get_payment();
-		$_REQUEST['type'] = empty($_GET['type']) ? 'recharge' : $_GET['type'];
-		$list = get_account_list($_REQUEST);
+		$filter = array();
+		$filter['user_id'] 		= !empty($_GET['id']) ? intval($_GET['id']) : 0;
+		$filter['keywords']		= empty($_GET['keywords'])			? ''                            : trim($_GET['keywords']);
+		$filter['process_type']	= !empty($_GET['process_type'])		? intval($_GET['process_type']) : -1;
+		$filter['payment']		= empty($_GET['payment'])			? ''                            : trim($_GET['payment']);
+		$filter['is_paid']		= !empty($_GET['is_paid'])			? intval($_GET['is_paid'])      : -1;
+		$filter['start_date']	= !empty($_GET['start_date'])		? ''                            : $_GET['start_date'];
+		$filter['end_date']		= !empty($_GET['end_date'])			? ''                            : $_GET['end_date'];
 		
-		$this->assign('type',		$_GET['type']);
-		$this->assign('id',			$user_id);
+		$filter['type'] = empty($_GET['type']) ? 'recharge' : $_GET['type'];
+		$list = get_account_list($filter);
+		
+		$payment = get_payment();
+		
+		$this->assign('type',		$type);
+		$this->assign('id',			$filter['user_id']);
 		$this->assign('payment',	$payment);
 		$this->assign('list',		$list);
 		
-		$this->assign('form_action',	RC_Uri::url('finance/admin_account/init'));
+		$this->assign('form_action',	RC_Uri::url('finance/admin_account/init', array('type' => $type)));
 		$this->assign('batch_action',	RC_Uri::url('finance/admin_account/batch_remove'));
 		
 		$this->display('admin_account_list.dwt');
@@ -284,14 +293,19 @@ class admin_account extends ecjia_admin {
 			$account = RC_Lang::get('user::user_account.withdraw');
 		}
 		
+		$type = empty($_POST['type']) ? 'recharge' : $_POST['type'];
+		
 		ecjia_admin::admin_log(RC_Lang::get('user::user_account.log_username').$user_info['user_name'].','.$account.$amount, 'add', 'user_account');
 
-		$links[0]['text'] = RC_Lang::get('user::user_account.back_list');
-		$links[0]['href'] = RC_Uri::url('finance/admin_account/init');
-		$links[1]['text'] = RC_Lang::get('user::user_account.continue_add');
-		$links[1]['href'] = RC_Uri::url('finance/admin_account/add');
+		if ($type == 'recharge') {
+			$links[0]['text'] = RC_Lang::get('user::user_account.back_recharge_list');
+		} elseif ($type == 'withdraw'){
+			$links[0]['text'] = RC_Lang::get('user::user_account.back_withdraw_list');
+		}
 		
-		$type = empty($_POST['type']) ? 'recharge' : $_POST['type'];
+		$links[0]['href'] = RC_Uri::url('finance/admin_account/init', array('type' => $type));
+		$links[1]['text'] = RC_Lang::get('user::user_account.continue_add');
+		$links[1]['href'] = RC_Uri::url('finance/admin_account/add', array('type' => $type));
 		
 		return $this->showmessage(RC_Lang::get('user::user_account.add_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links, 'pjaxurl' => RC_Uri::url('finance/admin_account/init', array('type' => $type))));
 	}
@@ -384,9 +398,14 @@ class admin_account extends ecjia_admin {
 		}
 		
 		ecjia_admin::admin_log(RC_Lang::get('user::user_account.log_username').$user_name.','.$account.$info['amount'], 'edit', 'user_account');
-		$links[0]['text'] = RC_Lang::get('user::user_account.back_list');
 		
 		$type = empty($_POST['type']) ? 'recharge' : $_POST['type'];
+		
+		if ($type == 'recharge') {
+			$links[0]['text'] = RC_Lang::get('user::user_account.back_recharge_list');
+		} elseif ($type == 'withdraw'){
+			$links[0]['text'] = RC_Lang::get('user::user_account.back_withdraw_list');
+		}
 		
 		$links[0]['href'] = RC_Uri::url('finance/admin_account/init', array('type' => $_POST['type']));
 		return $this->showmessage(RC_Lang::get('user::user_account.edit_success'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links));
@@ -487,7 +506,12 @@ class admin_account extends ecjia_admin {
 		
 		$type = empty($_POST['type']) ? 'recharge' : $_POST['type'];
 		
-		$links[0]['text'] = RC_Lang::get('user::user_account.back_list');
+		if ($type == 'recharge') {
+			$links[0]['text'] = RC_Lang::get('user::user_account.back_recharge_list');
+		} elseif ($type == 'withdraw'){
+			$links[0]['text'] = RC_Lang::get('user::user_account.back_withdraw_list');
+		}
+		
 		$links[0]['href'] = RC_Uri::url('finance/admin_account/init', array('type'=> $type));
 		return $this->showmessage(RC_Lang::get('user::user_account.attradd_succed'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('links' => $links));
 	}
@@ -500,8 +524,12 @@ class admin_account extends ecjia_admin {
 		/* 检查权限 */
 		$this->admin_priv('surplus_manage', ecjia::MSGTYPE_JSON);
 		
-		$id 		= intval($_REQUEST['id']);
-		$user_name 	= empty($data['user_name']) ? RC_Lang::get('user::users.no_name') : $data['user_name'];
+		$id 		= intval($_GET['id']);
+		
+		$user_account_info = RC_DB::table('user_account')->where('id', $id)->first();
+		$name = RC_DB::table('users')->where('user_id', $user_account_info['user_id'])->pluck('user_name');
+		
+		$user_name 	= empty($name) ? RC_Lang::get('user::users.no_name') : $name;
 		
 		RC_DB::table('user_account')->where('id', $id)->delete();
 		ecjia_admin::admin_log(addslashes($user_name), 'remove', 'user_account');
@@ -570,7 +598,6 @@ class admin_account extends ecjia_admin {
 		$account_info['pay_time']   = RC_Time::local_date(ecjia::config('time_format'), $account_info['paid_time']);
 		
 		//订单流程状态
-		//$time_key = 1;
 		if ($account_info['is_paid'] == 0) {
 			$is_paid = 0;
 		}elseif ($account_info['is_paid'] == 1) {

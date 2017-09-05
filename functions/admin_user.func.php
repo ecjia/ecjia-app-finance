@@ -148,7 +148,8 @@ function get_account_list($args = array()) {
 	}
 
 	if ($filter['keywords']) {
-		$db_user_account->where(RC_DB::raw('u.user_name'), 'like', '%'.mysql_like_quote($filter['keywords']).'%');
+		//$db_user_account->where(RC_DB::raw('u.user_name'), 'like', '%'.mysql_like_quote($filter['keywords']).'%');
+		$db_user_account ->whereRaw('(u.user_name like  "%' . mysql_like_quote($filter['keywords']) . '%" or u.mobile_phone like "%'.mysql_like_quote($filter['keywords']).'%" )');
 	}
 	
 	/*　时间过滤　*/

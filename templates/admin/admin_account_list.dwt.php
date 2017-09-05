@@ -20,7 +20,7 @@
 	<form action="{$form_action}" name="searchForm" method="post">
 		<div class="wspan12">
 			<div class="top_right f_r">
-				<input type="text" name="keywords" value="{$list.filter.keywords}" placeholder="{lang key='user::user_account.user_name_keyword'}"/>
+				<input type="text" name="keywords" value="{$list.filter.keywords}" placeholder="{lang key='user::user_account.user_keyword'}"/>
 				<button class="btn m_l5" type="submit">{lang key='system::system.button_search'}</button>
 			</div>
 		</div>
