@@ -420,7 +420,7 @@ class admin_account extends ecjia_admin {
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account.check')));
 		$this->assign('ur_here', RC_Lang::get('user::user_account.check'));
 		
-		$type = empty($_POST['type']) ? 'recharge' : $_POST['type'];
+		$type = empty($_GET['type']) ? 'recharge' : $_GET['type'];
 		
 		if ($type == 'recharge') {
 			$this->assign('action_link', array('text' => '充值订单', 'href' => RC_Uri::url('finance/admin_account/init', array('type' => $type))));
@@ -448,7 +448,7 @@ class admin_account extends ecjia_admin {
 		$this->assign('id',				$id);
 		$this->assign('check_action',	RC_Uri::url('finance/admin_account/action'));
 		$this->assign('is_check',		1);
-		$this->assign('type',  $_GET['type']);
+		$this->assign('type',  $type);
 		
 		$this->display('admin_account_check.dwt');
 	}
