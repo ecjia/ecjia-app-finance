@@ -109,7 +109,7 @@ function get_account_list($args = array()) {
 	
 	$filter['user_id']		= empty($args['user_id'])			? 0                             : intval($args['user_id']);
 	$filter['keywords']		= empty($args['keywords'])			? ''                            : trim($args['keywords']);
-	$filter['process_type']	= isset($args['process_type'])		? intval($args['process_type']) : -1;
+	//$filter['process_type']	= isset($args['process_type'])		? intval($args['process_type']) : -1;
 	$filter['payment']		= empty($args['payment'])			? ''                            : trim($args['payment']);
 	$filter['is_paid']		= isset($args['is_paid'])			? intval($args['is_paid'])      : -1;
 	$filter['start_date']	= empty($args['start_date'])		? ''                            : $args['start_date'];
@@ -125,9 +125,10 @@ function get_account_list($args = array()) {
 	if ($filter['user_id'] > 0) {
 		$db_user_account->where(RC_DB::raw('ua.user_id'), $filter['user_id']);
 	}
-	if ($filter['process_type'] != -1) {
-		$db_user_account->where(RC_DB::raw('process_type'), $filter['process_type']);
-	} 
+	//if ($filter['process_type'] != -1) {
+	//	$db_user_account->where(RC_DB::raw('process_type'), $filter['process_type']);
+	//} 
+
 	if ($filter['type'] == 'recharge') {
 		$db_user_account->where(RC_DB::raw('process_type'), 0);
 	} elseif ($filter['type'] == 'withdraw') {

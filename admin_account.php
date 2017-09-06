@@ -131,7 +131,7 @@ class admin_account extends ecjia_admin {
 		$filter = array();
 		$filter['user_id'] 		= !empty($_GET['id']) ? intval($_GET['id']) : 0;
 		$filter['keywords']		= empty($_GET['keywords'])			? ''                            : trim($_GET['keywords']);
-		$filter['process_type']	= !empty($_GET['process_type'])		? intval($_GET['process_type']) : -1;
+		//$filter['process_type']	= !empty($_GET['process_type'])		? intval($_GET['process_type']) : -1;
 		$filter['payment']		= empty($_GET['payment'])			? ''                            : trim($_GET['payment']);
 		$filter['is_paid']		= !empty($_GET['is_paid'])			? intval($_GET['is_paid'])      : -1;
 		$filter['start_date']	= !empty($_GET['start_date'])		? ''                            : $_GET['start_date'];
@@ -578,7 +578,7 @@ class admin_account extends ecjia_admin {
 	public function info() {
 		ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('订单详情'));
 		$this->assign('ur_here', '订单详情');
-		$type = empty($_POST['type']) ? 'recharge' : $_POST['type'];
+		$type = empty($_GET['type']) ? 'recharge' : $_GET['type'];
 		
 		if ($type == 'recharge') {
 			$this->assign('action_link', array('text' => '充值订单', 'href' => RC_Uri::url('finance/admin_account/init', array('type' => $type))));
@@ -589,7 +589,7 @@ class admin_account extends ecjia_admin {
 		$order_sn = isset($_GET['order_sn']) ? $_GET['order_sn'] : '';
 		$id = isset($_GET['id']) ? $_GET['id'] : 0;
 		
-		$account_info 				= RC_DB::table('user_account')->where('order_sn', $order_sn)->first();
+		$account_info 				= RC_DB::table('user_account')->where('id', $id)->first();
 		$account_info['user_name']  = RC_DB::table('users')->where('user_id', $account_info['user_id'])->pluck('user_name');
 		$account_info['pay_name'] 	= RC_DB::table('payment')->where('pay_code', $account_info['payment'])->pluck('pay_name');
 		$account_info['amount']		= abs($account_info['amount']);

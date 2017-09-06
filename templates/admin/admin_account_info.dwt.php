@@ -47,23 +47,17 @@
 		<div class="accordion-group">
 			<div class="accordion-heading">
 				<div class="accordion-toggle acc-in" data-toggle="collapse" data-target="#telescopic1">
-					<strong>{lang key='user::user_account.user_information'}</strong>
+					<strong>订单信息</strong>
 				</div>
 			</div>
 			<div class="accordion-body in collapse" id="telescopic1">
 				<table class="table table-oddtd m_b0">
 					<tbody class="first-td-no-leftbd">
 						<tr>
-							<td><div align="right"><strong>{lang key='user::user_account.label_user_id'}</strong></div></td>
-							<td>
-								<!-- {if $account_info.user_name} -->
-								{$account_info.user_name}
-								<!-- {else} -->
-								{lang key='user::user_account.anonymous_member'}
-								<!-- {/if} -->
-							</td>
-							<td><div align="right"><strong>{lang key='user::user_account.label_surplus_amount'}</strong></div></td>
-							<td>￥{$account_info.amount}{lang key='user::user_account.yuan'}</td>				
+							<td><div align="right"><strong>订单编号</strong></div></td>
+							<td>{$account_info.order_sn}</td>
+							<td><div align="right"><strong>申请时间</strong></div></td>
+							<td>{$account_info.add_time}</td>
 						</tr>
 						<tr>
 							<td><div align="right"><strong>{lang key='user::user_account.label_process_type'}</strong></div></td>
@@ -82,17 +76,21 @@
 							</td>
 						</tr>
 						<tr>
-							<td><div align="right"><strong>申请时间</strong></div></td>
-							<td>{$account_info.add_time}</td>
-							<td><div align="right"><strong>订单编号</strong></div></td>
-							<td>{$account_info.order_sn}</td>
+							<td><div align="right"><strong>{lang key='user::user_account.label_user_id'}</strong></div></td>
+							<td>
+								<!-- {if $account_info.user_name} -->
+								{$account_info.user_name}
+								<!-- {else} -->
+								{lang key='user::user_account.anonymous_member'}
+								<!-- {/if} -->
+							</td>
+							<td><div align="right"><strong>{lang key='user::user_account.label_surplus_amount'}</strong></div></td>
+							<td>￥{$account_info.amount}{lang key='user::user_account.yuan'}</td>				
 						</tr>
-						<!-- {if $is_check} -->
 						<tr>
 							<td><div align="right"><strong>{lang key='user::user_account.label_surplus_desc'}</strong></div></td>
 							<td colspan="3">{$account_info.user_note}</td>
 						</tr>
-						<!-- {/if} -->
 					</tbody>
 				</table>
 			</div>
@@ -112,14 +110,6 @@
 				<form class="form-horizontal" method="post" action="{if $account_info.is_paid neq '1'}{$check_action}{else}{$form_action}{/if}" name="theForm">
 					<table class="table table-oddtd m_b0">
 						<tbody class="first-td-no-leftbd">
-							<!-- {if !$is_check} -->
-							<tr>
-								<td><div align="right"><strong>{lang key='user::user_account.label_surplus_desc'}</strong></div></td>
-								<td colspan="3">
-									<textarea class="span10" name="user_note" cols="55" rows="6">{$account_info.user_note}</textarea>
-								</td>
-							</tr>
-							<!-- {/if} -->
 							<tr>
 								<td><div align="right"><strong>{lang key='user::user_account.label_surplus_notic'}</strong></div></td>
 								<td colspan="3">
