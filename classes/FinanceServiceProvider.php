@@ -2,9 +2,9 @@
 
 namespace Ecjia\App\Finance;
 
-use Royalcms\Component\App\AppServiceProvider;
+use Royalcms\Component\App\AppParentServiceProvider;
 
-class FinanceServiceProvider extends  AppServiceProvider
+class FinanceServiceProvider extends  AppParentServiceProvider
 {
     
     public function boot()
