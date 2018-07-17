@@ -65,6 +65,7 @@ class finance_account_change_log_api extends Component_Event_Api {
         $change_desc 	= isset($options['change_desc']) 	? $options['change_desc'] 	: '';
         $change_type 	= isset($options['change_type']) 	? $options['change_type'] 	: ACT_OTHER;
         
+        
         return $this->log_account_change($user_id, $user_money, $frozen_money, $rank_points, $pay_points, $change_desc, $change_type);
     }
     
@@ -95,7 +96,7 @@ class finance_account_change_log_api extends Component_Event_Api {
             'user_id'		=> $user_id,
             'user_money'	=> $user_money,
             'frozen_money'	=> $frozen_money,
-            'rank_points'	=> $rank_points,
+            'rank_points'	=> 0,
             'pay_points'	=> $pay_points,
             'change_time'	=> RC_Time::gmtime(),
             'change_desc'	=> $change_desc,
@@ -107,10 +108,20 @@ class finance_account_change_log_api extends Component_Event_Api {
         // 	TODO: 暂时先恢复之前的写法
     
         $step = $user_money.", frozen_money = frozen_money + ('$frozen_money')," .
-        " rank_points = rank_points + ('$rank_points')," .
+//         " rank_points = rank_points + ('$rank_points')," .
         " pay_points = pay_points + ('$pay_points')";
     
         RC_DB::table('users')->where('user_id', $user_id)->increment('user_money', $step);
+        
+        if ($rank_points) {
+            $data = array (
+                'user_id'			=> $user_id,
+                'rank_points'		=> $rank_points,
+                'change_desc'		=> $change_desc,
+                'change_type'		=> $change_type,
+            );
+            RC_Api::api('user', 'rank_points_change_log', $data);
+        }
         
         $user_info = RC_DB::table('users')->where('user_id', $user_id)->select('user_name', 'user_money', 'mobile_phone')->first();
         
