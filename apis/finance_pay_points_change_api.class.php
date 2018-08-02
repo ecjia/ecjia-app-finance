@@ -47,96 +47,78 @@
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
- * 会员 等级积分 变动日志记录接口
+ * 会员消费积分 变动日志记录接口
  * @author 
  */
-class user_rank_points_change_log_api extends Component_Event_Api {
-    
-    public function call(&$options) {
-        if (!is_array($options) || !isset($options['user_id'])) {
-            return new ecjia_error('invalid_parameter', RC_Lang::get('users.users.invalid_parameter'));
+class finance_pay_points_change_api extends Component_Event_Api {
+
+    /**
+     * @param integer user_id       必填，用户ID
+     * @param integer point         必填，变动积分
+     * @param string  change_desc   必填，变动积分日志
+     * @param string  from_type     选填，变动来源类型
+     * @param string  from_value    选填，变动来源内容
+     *
+     * @return ecjia_error|integer
+     */
+    public function call(& $options)
+    {
+        if (!array_get($options, 'point') || !array_get($options, 'change_desc') || !array_get($options, 'user_id')) {
+            return new ecjia_error('invalid_parameter', '请求接口finance_pay_points_change_api参数无效');
         }
         
-        $user_id 			= $options['user_id'];
-        $rank_points 		= isset($options['rank_points']) 	? $options['rank_points'] 		: 0;
-        $change_desc 		= isset($options['change_desc']) 	? $options['change_desc'] 		: '';
-        $change_type 		= isset($options['change_type']) 	? $options['change_type'] 		: ACT_OTHER;
-        $from_type			= isset($options['from_type']) 		? $options['from_type'] 		: '';
-        $from_value			= isset($options['from_value'])		? $options['from_value'] 	: '';
-        
-        return $this->log_account_change($user_id, $rank_points, $change_desc, $change_type, $from_type, $from_value);
+        $user_id 			= array_get($options, 'user_id');
+        $point 			    = array_get($options, 'point');
+        $change_desc 		= array_get($options, 'change_desc');
+        $from_type 		    = array_get($options, 'from_type');
+        $from_value 		= array_get($options, 'from_value');
+
+        if ($point > 0) {
+            $change_type =  ACT_PAY_POINT_SAVING;
+        } else if ($point < 0) {
+            $change_type =  ACT_PAY_POINT_DEDUCTION;
+        }
+
+        return $this->log_account_change($user_id, $point, $change_desc, $change_type, $from_type, $from_value);
     }
     
     
     /**
      * 记录帐户变动
      *
-     * @param int $user_id
-     *        	用户id
-     * @param float $user_money
-     *        	可用余额变动
-     * @param float $frozen_money
-     *        	冻结余额变动
-     * @param int $rank_points
-     *        	等级积分变动
-     * @param int $pay_points
-     *        	消费积分变动
-     * @param string $change_desc
-     *        	变动说明
-     * @param int $change_type
-     *        	变动类型：参见常量文件
+     * @param int $user_id 用户id
+     * @param int $point 消费积分变动
+     * @param string $change_desc 变动说明
+     * @param int $change_type 变动类型：参见常量文件
      * @return void
      */
-    private function log_account_change($user_id, $rank_points = 0, $change_desc = '', $change_type = ACT_OTHER, $from_type='', $from_value='') {
-    	/* 插入帐户变动记录 */
+    private function log_account_change($user_id, $point = 0, $change_desc = '', $change_type = ACT_OTHER, $from_type = '', $from_value = '')
+    {
+        /* 插入帐户变动记录 */
         $account_log = array (
             'user_id'			=> $user_id,
             'user_money'		=> 0,
             'frozen_money'		=> 0,
-            'rank_points'		=> $rank_points,
-            'pay_points'		=> 0,
+            'rank_points'		=> 0,
+            'pay_points'		=> $point,
             'change_time'		=> RC_Time::gmtime(),
             'change_desc'		=> $change_desc,
             'change_type'		=> $change_type,
-        	'from_type'			=> empty($from_type) ? '' : $from_type,
-        	'from_value'		=> empty($from_value) ? '' : $from_value
+            'from_type'			=> empty($from_type) ? '' : $from_type,
+            'from_value'		=> empty($from_value) ? '' : $from_value
         );
-        $log_id = RC_DB::table('account_log')->insertGetId($account_log);
-    
-        /* 更新用户信息 */
-        // 	TODO: 暂时先恢复之前的写法
-    
-        $step = $rank_points;
-    
-        RC_DB::table('users')->where('user_id', $user_id)->increment('rank_points', $step);
-        
-        //重新计算会员等级
-        $this->refresh_user_rank($user_id);
-        
-        return $log_id;
+
+        return RC_DB::transaction(function () use ($account_log, $user_id, $point) {
+
+            $log_id = RC_DB::table('account_log')->insertGetId($account_log);
+
+            /* 更新用户信息 */
+            RC_DB::table('users')->where('user_id', $user_id)->increment('rank_points', $point);
+
+            return $log_id;
+        });
     }
     
-    private function refresh_user_rank($user_id) {
-        $user_info = RC_DB::table('users')->where('user_id', $user_id)->first();
-        if ($user_info['user_rank']) {
-            $rank_info = RC_DB::table('user_rank')->where('rank_id', $user_info['user_rank'])->first();
-            if ($rank_info['special_rank']) {
-                return $rank_info;
-            } else {
-                if($user_info['rank_points'] >= $rank_info['min_points'] && $user_info['rank_points'] < $rank_info['min_points']) {
-                    return $rank_info;
-                }
-            }
-        }
-        
-        $row = RC_DB::table('user_rank')->where('special_rank', 0)->where( 'min_points', '<=', $user_info['rank_points'])->where( 'max_points', '>', intval($user_info['rank_points']))->first();
-        RC_DB::table('users')->where('user_id', $user_id)->update(array('user_rank'=>$row['rank_id']));
-        if($user_info['user_rank'] != $row['rank_id']) {
-            //为更新用户购物车数据加标记
-            RC_Api::api('cart', 'mark_cart_goods', array('user_id' => $user_id));
-        }
-        return $row;
-    }
 }
 
 // end
