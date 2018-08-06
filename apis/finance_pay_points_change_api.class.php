@@ -70,8 +70,8 @@ class finance_pay_points_change_api extends Component_Event_Api {
         $user_id 			= array_get($options, 'user_id');
         $point 			    = array_get($options, 'point');
         $change_desc 		= array_get($options, 'change_desc');
-        $from_type 		    = array_get($options, 'from_type');
-        $from_value 		= array_get($options, 'from_value');
+        $from_type 		    = array_get($options, 'from_type', '');
+        $from_value 		= array_get($options, 'from_value', '');
 
         if ($point > 0) {
             $change_type =  ACT_PAY_POINT_SAVING;
@@ -108,12 +108,12 @@ class finance_pay_points_change_api extends Component_Event_Api {
             'from_value'		=> empty($from_value) ? '' : $from_value
         );
 
-        return RC_DB::transaction(function () use ($account_log, $user_id, $point) {
+        return RC_DB::transaction(function () use ($account_log, $user_id) {
 
             $log_id = RC_DB::table('account_log')->insertGetId($account_log);
 
             /* 更新用户信息 */
-            RC_DB::table('users')->where('user_id', $user_id)->increment('pay_points', $point);
+            RC_DB::table('users')->where('user_id', $user_id)->increment('pay_points', $account_log['pay_points']);
 
             return $log_id;
         });
