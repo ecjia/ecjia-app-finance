@@ -502,7 +502,7 @@ class admin_account extends ecjia_admin {
 				$fmt_amount   = str_replace('-', '', $amount);
 				
 				/* 如果扣除的余额多于此会员拥有的余额，提示 */
-				if ($fmt_amount > $user_account) {
+				if ($fmt_amount > $user_account + $frozen_money) {
 					return $this->showmessage(RC_Lang::get('user::user_account.surplus_amount_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
 				}
 				
