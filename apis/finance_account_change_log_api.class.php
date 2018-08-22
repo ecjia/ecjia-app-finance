@@ -44,7 +44,7 @@
 //
 //  ---------------------------------------------------------------------------------
 //
-use Ecjia\System\Notifications\UserAccountChange;
+use Ecjia\App\Finance\Notifications\UserAccountChange;
 defined('IN_ECJIA') or exit('No permission resources.');
 
 /**
