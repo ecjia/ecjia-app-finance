@@ -112,9 +112,11 @@ class finance_account_balance_change_api extends Component_Event_Api {
             $log_id = RC_DB::table('account_log')->insertGetId($account_log);
 
             /* 更新用户信息 */
-            $step = $account_log['user_money'] . ", frozen_money = frozen_money + ('" . $account_log['frozen_money'] . "')";
-            RC_DB::table('users')->where('user_id', $user_id)->increment('user_money', $step);
+            // $step = $account_log['user_money'] . ", frozen_money = frozen_money + ('" . $account_log['frozen_money'] . "')";
+            // RC_DB::table('users')->where('user_id', $user_id)->increment('user_money', $step);
 
+            RC_DB::table('users')->where('user_id', $user_id)->increment('user_money', $account_log['user_money']);
+            RC_DB::table('users')->where('user_id', $user_id)->increment('frozen_money', $account_log['frozen_money']);
             return $log_id;
         });
 
