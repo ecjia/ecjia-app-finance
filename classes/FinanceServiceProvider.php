@@ -9,7 +9,7 @@ class FinanceServiceProvider extends  AppParentServiceProvider
     
     public function boot()
     {
-        $this->package('ecjia/app-finance');
+        $this->package('ecjia/app-finance', null, dirname(__DIR__));
     }
     
     public function register()
