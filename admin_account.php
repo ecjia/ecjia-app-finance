@@ -644,15 +644,20 @@ class admin_account extends ecjia_admin
      */
     public function info()
     {
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('订单详情'));
-        $this->assign('ur_here', '订单详情');
-        $type = empty($_GET['type']) ? 'recharge' : $_GET['type'];
+        $this->admin_priv('surplus_manage');
 
+        $type = empty($_GET['type']) ? 'recharge' : $_GET['type'];
         if ($type == 'recharge') {
-            $this->assign('action_link', array('text' => '充值订单', 'href' => RC_Uri::url('finance/admin_account/init', array('type' => $type))));
+            $ur_here = '充值详情';
+            $text = '充值订单';
         } elseif ($type == 'withdraw') {
-            $this->assign('action_link', array('text' => '提现申请', 'href' => RC_Uri::url('finance/admin_account/init', array('type' => $type))));
+            $text = '提现申请';
+            $ur_here = '提现详情';
         }
+
+        $this->assign('ur_here', $ur_here);
+        $this->assign('action_link', array('text' => $text, 'href' => RC_Uri::url('finance/admin_account/init', array('type' => $type))));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here($ur_here));
 
         $order_sn = isset($_GET['order_sn']) ? $_GET['order_sn'] : '';
         $id       = isset($_GET['id']) ? $_GET['id'] : 0;
@@ -681,7 +686,7 @@ class admin_account extends ecjia_admin
         $this->assign('account_info', $account_info);
         $this->assign('order_sn', $order_sn);
         $this->assign('id', $id);
-        $this->assign('type', $_GET['type']);
+        $this->assign('type', $type);
         $this->display('admin_account_info.dwt');
     }
 
