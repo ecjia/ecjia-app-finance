@@ -248,7 +248,7 @@ class admin_account extends ecjia_admin
             return $this->showmessage(RC_Lang::get('user::user_account.min_amount_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
-        $order_sn = $this->get_order_sn();
+        $order_sn = ecjia_order_deposit_sn();
 
         $data = array(
             'user_id'      => $user_info['user_id'],
@@ -409,7 +409,7 @@ class admin_account extends ecjia_admin
         if (!empty($info['order_sn'])) {
             $order_sn = $info['order_sn'];
         } else {
-            $order_sn = $this->get_order_sn();
+            $order_sn = ecjia_order_deposit_sn();
         }
 
         /* 更新数据表 */
