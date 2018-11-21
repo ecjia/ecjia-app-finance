@@ -665,7 +665,7 @@ class admin_account extends ecjia_admin
         $account_info              = RC_DB::table('user_account')->where('id', $id)->first();
         $account_info['user_name'] = RC_DB::table('users')->where('user_id', $account_info['user_id'])->pluck('user_name');
         $account_info['pay_name']  = RC_DB::table('payment')->where('pay_code', $account_info['payment'])->pluck('pay_name');
-        $account_info['amount']    = abs($account_info['amount']);
+        $account_info['amount']    = abs($account_info['apply_amount']);
         $account_info['user_note'] = htmlspecialchars($account_info['user_note']);
         $account_info['add_time']  = RC_Time::local_date(ecjia::config('time_format'), $account_info['add_time']);
         $account_info['pay_time']  = RC_Time::local_date(ecjia::config('time_format'), $account_info['paid_time']);
