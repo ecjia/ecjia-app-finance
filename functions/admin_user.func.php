@@ -189,6 +189,9 @@ function get_account_list($args = array()) {
 
 		$list = $db_user_account->orderBy($filter['sort_by'], $filter['sort_order'])->take(15)->skip($page->start_id-1)->select(RC_DB::raw('ua.*'), RC_DB::raw('u.user_name'))->get();
 
+		$withdraw_fee        	= ecjia::config('withdraw_fee');
+ 		$withdraw_min_amount 	= ecjia::config('withdraw_min_amount');
+
 		if (!empty($list)) {
 			foreach ($list AS $key => $value) {
 				$list[$key]['surplus_amount']		= price_format(abs($value['amount']), false);
@@ -196,6 +199,11 @@ function get_account_list($args = array()) {
 				$list[$key]['process_type_name']	= RC_Lang::get('user::user_account.surplus_type.'.$value['process_type']);
 				/* php 过滤html标签 */
 				$list[$key]['payment']				= empty($pay_name[$value['payment']]) ? strip_tags($value['payment']) : strip_tags($pay_name[$value['payment']]);
+
+				$list[$key]['withdraw_fee']          = abs($value['apply_amount']) * $withdraw_fee / 100;
+	            $list[$key]['formated_withdraw_fee'] = ecjia_price_format($list[$key]['withdraw_fee']);
+	            $list[$key]['real_amount']           = abs($value['apply_amount']) - $list[$key]['withdraw_fee'];
+	            $list[$key]['formated_real_amount']  = ecjia_price_format($list[$key]['real_amount']);
 			}
 		}
 	}
