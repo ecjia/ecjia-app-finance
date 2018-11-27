@@ -64,9 +64,6 @@ class finance_refund_back_pay_points_api extends Component_Event_Api {
         
         $refund_id 			= array_get($options, 'refund_id');
         $refund_info 		= RC_DB::table('refund_order')->where('refund_id', $refund_id)->first();
-
-        $back_money_total 	= $refund_info['surplus'] + $refund_info['money_paid'];
-        $back_integral 		= $refund_info['integral'];
         
         if ($refund_info['user_id'] > 0) {
         	if ($refund_info['integral'] > 0) { //下单有没使用积分
