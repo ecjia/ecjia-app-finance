@@ -67,8 +67,24 @@ class finance_refund_back_pay_points_api extends Component_Event_Api {
         
         if ($refund_info['user_id'] > 0) {
         	if ($refund_info['integral'] > 0) { //下单有没使用积分
-        		//退还下单使用的积分
-        		RC_DB::table('users')->where('user_id', $refund_info['user_id'])->increment('pay_points', $refund_info['integral']);
+        		//是否有退过积分
+        		$refund_back_integral_info = RC_DB::table('account_log')->where('user_id', $refund_info['user_id'])->where('from_type', 'refund_back_integral')->where('from_value', $refund_info['order_sn'])->first();
+        		if (empty($refund_back_integral_info)) {
+        			//退还下单使用的积分
+        			$options = array(
+        					'user_id' 		=> $refund_back_integral_info['user_id'],
+        					'rank_points' 	=> intval($refund_back_integral_info['rank_points']) * (-1),
+        					'pay_points' 	=> intval($refund_back_integral_info['pay_points']) * (-1),
+        					'change_desc' 	=> '订单退款，退还订单' . $refund_info['order_sn'] . '下单时使用的积分',
+        					'change_type' 	=> ACT_REFUND,
+        					'from_type' 	=> 'refund_back_integral',
+        					'from_value' 	=> $refund_info['order_sn']
+        			);
+        			$res = RC_Api::api('user', 'pay_points_change', $options);
+        			if (is_ecjia_error($res)) {
+        				return $res;
+        			}
+        		}
         	}
         	/*所退款订单，有没赠送积分；有赠送的话，赠送的积分扣除*/
         	$order_give_integral_info = RC_DB::table('account_log')->where('user_id', $refund_info['user_id'])->where('from_type', 'order_give_integral')->where('from_value', $refund_info['order_sn'])->first();
@@ -82,7 +98,7 @@ class finance_refund_back_pay_points_api extends Component_Event_Api {
         				'from_type' 	=> 'refund_deduct_integral',
         				'from_value' 	=> $refund_info['order_sn']
         		);
-        		$res = RC_Api::api('user', 'account_change_log', $options);
+        		$res = RC_Api::api('user', 'pay_points_change', $options);
         		if (is_ecjia_error($res)) {
         			return $res;
         		}
