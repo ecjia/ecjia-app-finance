@@ -72,6 +72,8 @@ class admin_account_manage extends ecjia_admin
         RC_Script::enqueue_script('user_surplus', RC_App::apps_url('statics/js/user_surplus.js', __FILE__));
         RC_Script::enqueue_script('jquery-peity');
 
+        RC_Style::enqueue_style('admin_account_manage', RC_App::apps_url('statics/css/admin_account_manage.css', __FILE__), array());
+
         $surplus_jslang = array(
             'keywords_required' => RC_Lang::get('user::user_account_manage.keywords_required'),
             'check_time'        => RC_Lang::get('user::user_account_manage.check_time'),
