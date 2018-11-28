@@ -3,6 +3,8 @@
 
 <!-- {block name="footer"} -->
 <script type="text/javascript">
+    var data = '{$data}';
+    var right_data = '{$right_data}';
     ecjia.admin.account_manage.init();
 </script>
 <!-- {/block} -->
@@ -44,7 +46,7 @@
                         <option value="{$val}" {if $val eq $month}selected{/if}>{$val} </option> <!-- {/foreach} -->
                     </select>
                 </div>
-                <button class="btn screen-btn" type="button">查询</button>
+                <button class="btn select-button" type="button">查询</button>
             </div>
         </form>
     </div>
@@ -57,7 +59,7 @@
             <div class="item-right">
                 <div class="right-item">
                     <div class="item-top">会员消费（元）</div>
-                    <div class="item-bottom">¥1069.00</div>
+                    <div class="item-bottom">{$account.surplus}</div>
                 </div>
                 <div class="right-item">
                     <div class="item-top">会员充值（元）</div>
@@ -65,7 +67,7 @@
                 </div>
                 <div class="right-item">
                     <div class="item-top">退款存入（元）</div>
-                    <div class="item-bottom">¥1069.00</div>
+                    <div class="item-bottom">{$account.return_money}</div>
                 </div>
                 <div class="right-item">
                     <div class="item-top">提现（元）</div>
@@ -77,7 +79,7 @@
                 </div>
                 <div class="right-item">
                     <div class="item-top">剩余总余额（元）</div>
-                    <div class="item-bottom">¥1069.00</div>
+                    <div class="item-bottom">{$account.user_money}</div>
                 </div>
             </div>
         </div>
@@ -86,15 +88,15 @@
             <div class="item-right">
                 <div class="right-item">
                     <div class="item-top">下单发放</div>
-                    <div class="item-bottom">1069</div>
+                    <div class="item-bottom">{$account.pay_points}</div>
                 </div>
                 <div class="right-item">
                     <div class="item-top">积分抵现</div>
-                    <div class="item-bottom">1069</div>
+                    <div class="item-bottom">{$account.integral}</div>
                 </div>
                 <div class="right-item">
                     <div class="item-top">总发放积分</div>
-                    <div class="item-bottom">1069</div>
+                    <div class="item-bottom">{$account.total_points}</div>
                 </div>
             </div>
         </div>
