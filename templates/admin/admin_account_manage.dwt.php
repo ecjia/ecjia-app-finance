@@ -138,22 +138,38 @@
             <table class="table table-striped table-hide-edit">
                 <thead>
                     <tr>
-                        <th class="w180">变动时间</th>
-                        <th>会员名称</th>
+                        <th class="w130">变动时间</th>
+                        <th class="w110">会员名称</th>
                         <th>变动原因</th>
-                        <th>余额变动</th>
-                        <th>积分变动</th>
-                        <th>关联订单</th>
+                        <th class="w110">余额变动</th>
+                        <th class="w110">积分变动</th>
+                        <th class="w110">关联订单</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- {foreach from=$list.item key=key item=val} -->
+                    <!-- {foreach from=$log_list.item key=key item=val} -->
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{$val.change_time}</td>
+                        <td>{$val.user_name}</td>
+                        <td>{$val.change_desc}</td>
+                        <td>
+                            <!-- {if $val.user_money gt 0} -->
+                            <span class="ecjiafc-0000FF">+{$val.user_money}</span>
+                            <!-- {elseif $val.user_money lt 0} -->
+                            <span class="ecjiafc-FF0000">{$val.user_money}</span>
+                            <!-- {else} -->
+                            {$val.user_money}
+                            <!-- {/if} -->
+                        </td>
+                        <td>
+                            <!-- {if $val.rank_points gt 0} -->
+                            <span class="ecjiafc-0000FF">+{$val.rank_points}</span>
+                            <!-- {elseif $val.rank_points lt 0} -->
+                            <span class="ecjiafc-FF0000">{$val.rank_points}</span>
+                            <!-- {else} -->
+                            {$val.rank_points}
+                            <!-- {/if} -->
+                        </td>
                         <td></td>
                     </tr>
                     <!-- {foreachelse}-->
@@ -163,7 +179,7 @@
                     <!-- {/foreach} -->
                 </tbody>
             </table>
-            <!-- {$list.page} -->
+            <!-- {$log_list.page} -->
         </div>
     </div>
 </div>

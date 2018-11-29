@@ -146,6 +146,9 @@ class admin_account_manage extends ecjia_admin
 
         $this->assign('form_action', RC_Uri::url('finance/admin_account_manage/init'));
 
+        $log_list = $this->get_account_log();
+        $this->assign('log_list', $log_list);
+
         $this->display('admin_account_manage.dwt');
     }
 
@@ -273,6 +276,49 @@ class admin_account_manage extends ecjia_admin
         $data['total_points'] = $points['pay_points'];
 
         return $data;
+    }
+
+    private function get_account_log()
+    {
+        $current_year = RC_Time::local_date('Y', RC_Time::gmtime());
+        $year         = !empty($_GET['year']) ? intval($_GET['year']) : $current_year;
+        $month        = !empty($_GET['month']) ? intval($_GET['month']) : 0;
+
+        if (empty($month)) {
+            $start_time = $year . '-1-1 00:00:00';
+            $em         = $year + 1 . '-1-1 00:00:00';
+            $end_time   = RC_Time::local_date('Y-m-d H:i:s', RC_Time::local_strtotime($em) - 1);
+        } else {
+            $start_time = $year . '-' . $month . '-1 00:00:00';
+            $end_time   = RC_Time::local_date('Y-m-d 23:59:59', RC_Time::local_strtotime("$start_time +1 month -1 day"));
+        }
+        $start_date = RC_Time::local_strtotime($start_time);
+        $end_date   = RC_Time::local_strtotime($end_time);
+
+        $db_account_log = RC_DB::table('account_log as a')
+            ->where(RC_DB::raw('a.change_time'), '>=', $start_date)
+            ->where(RC_DB::raw('a.change_time'), '<', $end_date);
+
+        $count = $db_account_log->count();
+
+        $page = new ecjia_page($count, 15, 6);
+
+        $res = $db_account_log
+            ->leftJoin('users as u', RC_DB::raw('a.user_id'), '=', RC_DB::raw('u.user_id'))
+            ->select(RC_DB::raw('a.*, u.user_name'))
+            ->orderBy(RC_DB::raw('a.log_id'), 'DESC')
+            ->take(15)
+            ->skip($page->start_id - 1)
+            ->get();
+
+        $arr = array();
+        if (!empty($res)) {
+            foreach ($res as $row) {
+                $row['change_time'] = RC_Time::local_date(ecjia::config('time_format'), $row['change_time']);
+                $arr[]              = $row;
+            }
+        }
+        return array('item' => $arr, 'page' => $page->show(5), 'desc' => $page->page_desc());
     }
 }
 
