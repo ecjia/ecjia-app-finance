@@ -363,21 +363,23 @@ function get_account_log($user_id, $num = 15, $start, $process_type = '') {
  *                  frozen_money表示冻结资金，rank_points表示等级积分，pay_points表示消费积分
  * @return  array
  */
-function get_account_log_list($user_id, $account_type = '') {
+function get_account_log_list($user_id, $account_type = '', $date = []) {
 
-	//$db_account_log = RC_Model::model('user/account_log_model');
-	/* 检查参数 */
-	//$where['user_id'] = $user_id;
-	//if (in_array($account_type, array('user_money', 'frozen_money', 'rank_points', 'pay_points'))) {
-	//	$where[$account_type] = array('neq' => 0);
-	//}
-	
 	$db_account_log = RC_DB::table('account_log');
 	
 	if (in_array($account_type, array('user_money', 'frozen_money', 'rank_points', 'pay_points'))) {
 		$db_account_log->where(function($query) use ($account_type) {
 			$query->where($account_type, '>', 0)->orWhere($account_type, '<', 0);
 		});
+	}
+
+	if (!empty($date)) {
+		if (!empty($date['start_date']) && !empty($date['end_date'])) {
+			$start_date = RC_Time::local_strtotime($date['start_date']);
+			$end_date   = RC_Time::local_strtotime($date['end_date']);
+			
+            $db_account_log->where('change_time', '>=', $start_date)->where('change_time', '<', $end_date);
+		}
 	}
 
 	/* 查询记录总数，计算分页数 */
