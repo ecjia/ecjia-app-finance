@@ -639,12 +639,13 @@ function update_user_info() {
 		/* 取得用户等级和折扣 */
 		if ($row['user_rank'] == 0) {
 		    //重新计算会员等级
-		    RC_Api::api('user', 'update_user_rank', array('user_id' => $_SESSION['user_id']));
+		    $rank = RC_Api::api('user', 'update_user_rank', array('user_id' => $_SESSION['user_id']));
+		} else {
+		    $rank = $db_user_rank->field('rank_id, discount')->find('rank_id = "' . $row['user_rank'] . '"');
 		}
-		$row = $db_user_rank->field('rank_id, discount')->find('rank_id = "' . $row['user_rank'] . '"');
-		if ($row) {
-			$_SESSION['user_rank'] = $row['rank_id'];
-			$_SESSION['discount']  = $row['discount'] / 100.00;
+		if ($rank) {
+		    $_SESSION['user_rank'] = $rank['rank_id'];
+		    $_SESSION['discount']  = $rank['discount'] / 100.00;
 		} else {
 			$_SESSION['user_rank'] = 0;
 			$_SESSION['discount']  = 1;
@@ -755,14 +756,16 @@ function EM_user_info($user_id) {
 
 	if($user_info['user_rank'] == 0) {
 	    //重新计算会员等级
-	    RC_Api::api('user', 'update_user_rank', array('user_id' => $user_id));
+	    $row_rank = RC_Api::api('user', 'update_user_rank', array('user_id' => $user_id));
+	} else {
+	    //用户等级更新，不用计算，直接读取
+	    $row_rank = RC_DB::table('user_rank')->where('rank_id', $user_info['user_rank'])->first();
 	}
-	//用户等级更新，不用计算，直接读取
-	$row = RC_DB::table('user_rank')->where('rank_id', $user_info['user_rank'])->first();
-	$user_info['user_rank_name'] = $row['rank_name'];
-	$user_info['user_rank_id'] = $row['rank_id'];
+	
+	$user_info['user_rank_name'] = $row_rank['rank_name'];
+	$user_info['user_rank_id'] = $row_rank['rank_id'];
 	$level = 1;
-	if($row['special_rank'] == 0 && $row['min_points'] == 0) {
+	if($row_rank['special_rank'] == 0 && $row_rank['min_points'] == 0) {
 	    $level = 0;
 	}
 
