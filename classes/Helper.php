@@ -56,10 +56,9 @@ class Helper
      */
     public static function assign_adminlog_content() {
     	ecjia_admin_log::instance()->add_object('usermoney', '会员账户');
-	    ecjia_admin_log::instance()->add_object('user_account', '充值提现');
 	
 	    ecjia_admin_log::instance()->add_object('withdraw_apply', '提现申请');
-	    ecjia_admin_log::instance()->add_object('pay_apply', '充值申请');
+	    ecjia_admin_log::instance()->add_object('recharge_apply', '充值申请');
 	    
 	    ecjia_admin_log::instance()->add_action('check', '到款审核');
     }

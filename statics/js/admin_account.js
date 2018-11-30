@@ -14,27 +14,40 @@
 
         screen: function () {
             $(".select-button").click(function () {
-                var process_type = $("select[name='process_type'] option:selected").val();
                 var payment = $("select[name='payment'] option:selected").val();
-                var is_paid = $("select[name='is_paid'] option:selected").val();
                 var start_date = $("input[name='start_date']").val();
                 var end_date = $("input[name='end_date']").val();
 
-                if (start_date > end_date && (start_date != '' && end_date != '')) {
+                if (start_date == '' || end_date == '') {
                     var data = {
-                        message: account_jslang.check_time,
+                        message: '开始或结束时间不能为空',
                         state: "error",
                     };
                     ecjia.admin.showmessage(data);
                     return false;
                 }
+
+                if (start_date >= end_date) {
+                    var data = {
+                        message: '开始时间不能大于或等于结束时间',
+                        state: "error",
+                    };
+                    ecjia.admin.showmessage(data);
+                    return false;
+                }
+
                 var url = $("form[name='searchForm']").attr('action');
 
-                // if (process_type != '-1') url += '&process_type=' + process_type;
                 if (payment != '' && payment != undefined) url += '&payment=' + payment;
-                if (is_paid != '-1') url += '&is_paid=' + is_paid;
                 if (start_date != '') url += '&start_date=' + start_date;
                 if (end_date != '') url += '&end_date=' + end_date;
+
+                var keywords = $("input[name='keywords']").val();
+
+                if (keywords != '') {
+                    url += '&keywords=' + keywords;
+                }
+
                 ecjia.pjax(url);
             });
         },
@@ -117,7 +130,7 @@
         select_note: function () {
             $('input[name="pay_type"]').off('click').on('click', function () {
                 var $this = $(this);
-                    val = $this.val();
+                val = $this.val();
                 if (val == 0) {
                     $('.fixed_amount').show();
                     $('.random_amount').hide();
