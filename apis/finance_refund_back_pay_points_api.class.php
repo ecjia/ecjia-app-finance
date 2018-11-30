@@ -72,9 +72,8 @@ class finance_refund_back_pay_points_api extends Component_Event_Api {
         		if (empty($refund_back_integral_info)) {
         			//退还下单使用的积分
         			$options = array(
-        					'user_id' 		=> $refund_back_integral_info['user_id'],
-        					'rank_points' 	=> intval($refund_back_integral_info['rank_points']) * (-1),
-        					'pay_points' 	=> intval($refund_back_integral_info['pay_points']) * (-1),
+        					'user_id' 		=> $refund_info['user_id'],
+        					'point' 	=> intval($refund_info['integral']) * (-1),
         					'change_desc' 	=> '订单退款，退还订单' . $refund_info['order_sn'] . '下单时使用的积分',
         					'change_type' 	=> ACT_REFUND,
         					'from_type' 	=> 'refund_back_integral',
@@ -93,9 +92,8 @@ class finance_refund_back_pay_points_api extends Component_Event_Api {
         		$refund_deduct_integral_info = RC_DB::table('account_log')->where('user_id', $refund_info['user_id'])->where('from_type', 'refund_deduct_integral')->where('from_value', $refund_info['order_sn'])->first();
         		if (empty($refund_deduct_integral_info)) {
                     $options = array(
-                        'user_id'       => $order_give_integral_info['user_id'],
-                        'rank_points'   => intval($order_give_integral_info['rank_points']) * (-1),
-                        'pay_points'    => intval($order_give_integral_info['pay_points']) * (-1),
+                        'user_id'       => $refund_info['user_id'],
+                        'point'    => intval($order_give_integral_info['pay_points']) * (-1),
                         'change_desc'   => '订单退款，扣除订单' . $refund_info['order_sn'] . '下单时赠送的积分',
                         'change_type'   => ACT_REFUND,
                         'from_type'     => 'refund_deduct_integral',

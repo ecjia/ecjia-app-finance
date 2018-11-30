@@ -53,11 +53,12 @@ defined('IN_ECJIA') or exit('No permission resources.');
 class finance_pay_points_change_api extends Component_Event_Api {
 
     /**
-     * @param integer user_id       必填，用户ID
-     * @param integer point         必填，变动积分
-     * @param string  change_desc   必填，变动积分日志
-     * @param string  from_type     选填，变动来源类型
-     * @param string  from_value    选填，变动来源内容
+     * @param integer $user_id       必填，用户ID
+     * @param integer $point         必填，变动积分
+     * @param string  $change_desc   必填，变动积分日志
+     * @param string  $change_type   选填，变动积分类型
+     * @param string  $from_type     选填，变动来源类型
+     * @param string  $from_value    选填，变动来源内容
      *
      * @return ecjia_error|integer
      */
@@ -70,13 +71,16 @@ class finance_pay_points_change_api extends Component_Event_Api {
         $user_id 			= array_get($options, 'user_id');
         $point 			    = array_get($options, 'point');
         $change_desc 		= array_get($options, 'change_desc');
+        $change_type 		= array_get($options, 'change_type');
         $from_type 		    = array_get($options, 'from_type', '');
         $from_value 		= array_get($options, 'from_value', '');
 
-        if ($point > 0) {
-            $change_type =  ACT_PAY_POINT_SAVING;
-        } else if ($point < 0) {
-            $change_type =  ACT_PAY_POINT_DEDUCTION;
+        if (empty($change_type)) {
+            if ($point > 0) {
+                $change_type =  ACT_PAY_POINT_SAVING;
+            } else if ($point < 0) {
+                $change_type =  ACT_PAY_POINT_DEDUCTION;
+            }
         }
 
         return $this->log_account_change($user_id, $point, $change_desc, $change_type, $from_type, $from_value);
