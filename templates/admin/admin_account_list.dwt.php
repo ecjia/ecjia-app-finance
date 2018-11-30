@@ -83,7 +83,7 @@
 						<input type="checkbox" value="{$item.id}" disabled="disabled" />
 						<!-- {/if} -->
 					</td>
-					<td><a class="data-pjax" href='{url path="/finance/admin_account/info" args="order_sn={$item.order_sn}&id={$item.id}{if $type}&type={$type}{/if}"}'>{$item.order_sn}</a></td>
+					<td><a class="data-pjax" href='{url path="/finance/admin_account/info" args="order_sn={$item.order_sn}&id={$item.id}"}'>{$item.order_sn}</a></td>
 					<td>{if $item.user_name}{$item.user_name}{else}{lang key='user::user_account.no_user'}{/if}</td>
 					<td align="right">{$item.surplus_amount}</td>
 					<td>{if $item.payment}{$item.payment}{/if}</td>
@@ -91,9 +91,9 @@
 					<td align="center">{if $item.is_paid eq 1}{lang key='user::user_account.confirm'}{elseif $item.is_paid eq 0}{lang key='user::user_account.unconfirm'}{else}{lang key='user::user_account.cancel'}{/if}</td>
 					<td align="center">{$item.add_date}</td>
 					<td align="center">
-						<a class="data-pjax no-underline" href='{url path="finance/admin_account/info" args="id={$item.id}{if $type}&type={$type}{/if}"}' title="查看" ><i class="fontello-icon-doc-text"></i></a>
+						<a class="data-pjax no-underline" href='{url path="finance/admin_account/info" args="id={$item.id}"}' title="查看" ><i class="fontello-icon-doc-text"></i></a>
 						{if $item.is_paid neq 1}
-							<a class="ajaxremove no-underline" data-toggle="ajaxremove" data-msg="{lang key='user::user_account.delete_surplus_confirm'}" href='{url path="finance/admin_account/remove" args="id={$item.id}{if $type}&type={$type}{/if}"}' title="{lang key='user::user_account.delete'}"><i class="fontello-icon-trash"></i></a>
+							<a class="ajaxremove no-underline" data-toggle="ajaxremove" data-msg="{lang key='user::user_account.delete_surplus_confirm'}" href='{url path="finance/admin_account/remove" args="id={$item.id}"}' title="{lang key='user::user_account.delete'}"><i class="fontello-icon-trash"></i></a>
 						{/if}
 					</td>
 				</tr>
