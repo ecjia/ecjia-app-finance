@@ -30,7 +30,7 @@
 				
 				{else if $account_type eq 'rank_points'}
 				<span>当前账户成长值：<span class="ecjiafc-FF0000">{$user.rank_points}</span></span>
-				<span class="m_l30">所属会员等级：</span></span>
+				<span class="m_l30">所属会员等级：</span><span class="ecjiafc-FF0000">{if $user.user_rank_name}{$user.user_rank_name}{else}暂无{/if}</span></span>
 				{/if}
 			</div>
 			<div class="item">

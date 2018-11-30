@@ -129,6 +129,14 @@ class admin_account_log extends ecjia_admin
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here($nav_here));
 
         $user = get_user_info($user_id);
+        if ($user['user_rank'] == 0) {
+		    //重新计算会员等级
+		    $row_rank = RC_Api::api('user', 'update_user_rank', array('user_id' => $user['user_id']));
+		} else {
+		    $row_rank = RC_DB::table('user_rank')->where('rank_id', $user['user_rank'])->first();
+        }
+		$user['user_rank_name'] = $row_rank['rank_name'];
+        
         $this->assign('user', $user);
 
         $date = array(
