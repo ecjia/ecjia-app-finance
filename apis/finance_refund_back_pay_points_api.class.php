@@ -69,11 +69,13 @@ class finance_refund_back_pay_points_api extends Component_Event_Api {
         	if ($refund_info['integral'] > 0) { //下单有没使用积分
         		//是否已退过积分
         		$refund_back_integral_info = RC_DB::table('account_log')->where('user_id', $refund_info['user_id'])->where('from_type', 'refund_back_integral')->where('from_value', $refund_info['order_sn'])->first();
+        		//获取下单使用积分的记录
+        		$order_use_integral = RC_DB::table('account_log')->where('user_id', $refund_info['user_id'])->where('from_type', 'order_use_integral')->where('from_value', $refund_info['order_sn'])->first();
         		if (empty($refund_back_integral_info)) {
         			//退还下单使用的积分
         			$options = array(
-        					'user_id' 		=> $refund_info['user_id'],
-        					'point' 	    => intval($refund_info['integral']),
+        					'user_id' 		=> $order_use_integral['user_id'],
+        					'point' 	    => intval($order_use_integral['pay_points']),
         					'change_desc' 	=> '订单退款，退还订单' . $refund_info['order_sn'] . '下单时使用的积分',
         					'change_type' 	=> ACT_REFUND,
         					'from_type' 	=> 'refund_back_integral',
@@ -90,15 +92,18 @@ class finance_refund_back_pay_points_api extends Component_Event_Api {
         	if (!empty($order_give_integral_info)) {
         		//是否已扣除过积分
         		$refund_deduct_integral_info = RC_DB::table('account_log')->where('user_id', $refund_info['user_id'])->where('from_type', 'refund_deduct_integral')->where('from_value', $refund_info['order_sn'])->first();
+        		//获取赠送的积分记录
+        		$order_give_integral_info = RC_DB::table('account_log')->where('user_id', $refund_info['user_id'])->where('from_type', 'order_give_integral')->where('from_value', $refund_info['order_sn'])->first();
         		if (empty($refund_deduct_integral_info)) {
                     $options = array(
-                        'user_id'       => $refund_info['user_id'],
-                        'point'         => intval($refund_info['integral']) * (-1),
+                        'user_id'       => $order_give_integral_info['user_id'],
+                        'point'         => intval($order_give_integral_info['pay_points']) * (-1),
                         'change_desc'   => '订单退款，扣除订单' . $refund_info['order_sn'] . '下单时赠送的积分',
                         'change_type'   => ACT_REFUND,
                         'from_type'     => 'refund_deduct_integral',
                         'from_value'    => $refund_info['order_sn']
                     );
+                    
                     $res = RC_Api::api('finance', 'pay_points_change', $options);
                     if (is_ecjia_error($res)) {
                         return $res;
