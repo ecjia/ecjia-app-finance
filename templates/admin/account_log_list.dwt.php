@@ -13,8 +13,8 @@
 	<strong>{$ur_here}</strong>
 	<small>（{lang key='user::account_log.label_user_name'}{$user.user_name}）</small>
 	<a href="{$back_link.href}" class="btn plus_or_reply" ><i class="fontello-icon-reply"></i>{$back_link.text}</a>
-	<a href="{$link2.href}" class="btn plus_or_reply data-pjax" ><i class="{$link2.i}"></i>{$link2.text}</a>
-	<a href="{$link1.href}" class="btn plus_or_reply data-pjax" ><i class="{$link1.i}"></i>{$link1.text}</a>
+	<a href="{$link2.href}" class="btn plus_or_reply {if $link2.pjax}data-pjax{/if}" {if !$link2.pjax}target="__blank"{/if}><i class="{$link2.i}"></i>{$link2.text}</a>
+	<a href="{$link1.href}" class="btn plus_or_reply {if $link1.pjax}data-pjax{/if}" {if !$link1.pjax}target="__blank"{/if}><i class="{$link1.i}"></i>{$link1.text}</a>
 </h3>
 
 <div class="row-fluid">

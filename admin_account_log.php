@@ -100,23 +100,23 @@ class admin_account_log extends ecjia_admin
             $nav_here = '查看余额变动';
 
             $link1 = array('text' => '充值', 'href' => RC_Uri::url('finance/admin_account/add', array('user_id' => $user_id)), 'i' => 'fontello-icon-dollar');
-            $link2 = array('text' => '提现', 'href' => RC_Uri::url('withdraw/admin/edit', array('user_id' => $user_id)), 'i' => 'fontello-icon-dollar');
+            $link2 = array('text' => '提现', 'href' => RC_Uri::url('withdraw/admin/add', array('user_id' => $user_id)), 'i' => 'fontello-icon-dollar');
 
             $second_heading = '资金明细';
 
         } elseif ($account_type == 'pay_points') {
             $nav_here = '查看积分变动';
 
-            $link1 = array('text' => '增加积分', 'href' => RC_Uri::url('finance/admin_account_log/add_pay_points', array('user_id' => $user_id)), 'i' => 'fontello-icon-plus');
-            $link2 = array('text' => '减少积分', 'href' => RC_Uri::url('finance/admin_account_log/minus_pay_points', array('user_id' => $user_id)), 'i' => 'fontello-icon-minus');
+            $link1 = array('text' => '增加积分', 'href' => RC_Uri::url('finance/admin_account_log/add_pay_points', array('user_id' => $user_id)), 'i' => 'fontello-icon-plus', 'pjax' => true);
+            $link2 = array('text' => '减少积分', 'href' => RC_Uri::url('finance/admin_account_log/minus_pay_points', array('user_id' => $user_id)), 'i' => 'fontello-icon-minus', 'pjax' => true);
 
             $second_heading = '积分明细';
 
         } elseif ($account_type == 'rank_points') {
             $nav_here = '查看成长值变动';
 
-            $link1 = array('text' => '增加成长值', 'href' => RC_Uri::url('finance/admin_account_log/add_rank_points', array('user_id' => $user_id)), 'i' => 'fontello-icon-plus');
-            $link2 = array('text' => '减少成长值', 'href' => RC_Uri::url('finance/admin_account_log/minus_rank_points', array('user_id' => $user_id)), 'i' => 'fontello-icon-minus');
+            $link1 = array('text' => '增加成长值', 'href' => RC_Uri::url('finance/admin_account_log/add_rank_points', array('user_id' => $user_id)), 'i' => 'fontello-icon-plus', 'pjax' => true);
+            $link2 = array('text' => '减少成长值', 'href' => RC_Uri::url('finance/admin_account_log/minus_rank_points', array('user_id' => $user_id)), 'i' => 'fontello-icon-minus', 'pjax' => true);
 
             $second_heading = '成长值明细';
         }
