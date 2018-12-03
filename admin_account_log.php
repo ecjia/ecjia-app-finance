@@ -44,7 +44,6 @@
 //
 //  ---------------------------------------------------------------------------------
 //
-use Ecjia\App\Finance\Notifications\UserAccountChange;
 
 defined('IN_ECJIA') or exit('No permission resources.');
 
@@ -129,14 +128,17 @@ class admin_account_log extends ecjia_admin
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here($nav_here));
 
         $user = get_user_info($user_id);
-        if ($user['user_rank'] == 0) {
-		    //重新计算会员等级
-		    $row_rank = RC_Api::api('user', 'update_user_rank', array('user_id' => $user['user_id']));
-		} else {
-		    $row_rank = RC_DB::table('user_rank')->where('rank_id', $user['user_rank'])->first();
+        if (empty($user)) {
+            return $this->showmessage('该会员不存在', ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_ERROR);
         }
-		$user['user_rank_name'] = $row_rank['rank_name'];
-        
+
+        if ($user['user_rank'] == 0) {
+            //重新计算会员等级
+            $row_rank = RC_Api::api('user', 'update_user_rank', array('user_id' => $user['user_id']));
+        } else {
+            $row_rank = RC_DB::table('user_rank')->where('rank_id', $user['user_rank'])->first();
+        }
+        $user['user_rank_name'] = $row_rank['rank_name'];
         $this->assign('user', $user);
 
         $date = array(
@@ -185,6 +187,106 @@ class admin_account_log extends ecjia_admin
         $this->display('account_log_edit.dwt');
     }
 
+    public function add_pay_points()
+    {
+        $this->admin_priv('account_manage');
+
+        $user_id = intval($_GET['user_id']);
+        $this->assign('user_id', $user_id);
+        $this->assign('type', 'add_pay_points');
+
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('增加账户积分'));
+
+        $this->assign('ur_here', '增加账户积分');
+        $this->assign('action_link', array('href' => RC_Uri::url('finance/admin_account_log/init', array('account_type' => 'pay_points', 'user_id' => $user_id)), 'text' => '查看积分变动'));
+
+        $this->assign('form_action', RC_Uri::url('finance/admin_account_log/update'));
+
+        $user = get_user_info($user_id);
+        $this->assign('user', $user);
+
+        $this->display('account_points.dwt');
+    }
+
+    public function minus_pay_points()
+    {
+        $this->admin_priv('account_manage');
+
+        $user_id = intval($_GET['user_id']);
+        $this->assign('user_id', $user_id);
+        $this->assign('type', 'minus_pay_points');
+
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('减少账户积分'));
+
+        $this->assign('ur_here', '减少账户积分');
+        $this->assign('action_link', array('href' => RC_Uri::url('finance/admin_account_log/init', array('account_type' => 'pay_points', 'user_id' => $user_id)), 'text' => '查看积分变动'));
+
+        $this->assign('form_action', RC_Uri::url('finance/admin_account_log/update'));
+
+        $user = get_user_info($user_id);
+        $this->assign('user', $user);
+
+        $this->display('account_points.dwt');
+    }
+
+    public function add_rank_points()
+    {
+        $this->admin_priv('account_manage');
+
+        $user_id = intval($_GET['user_id']);
+        $this->assign('user_id', $user_id);
+        $this->assign('type', 'add_rank_points');
+
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('增加会员成长值'));
+
+        $this->assign('ur_here', '增加会员成长值');
+        $this->assign('action_link', array('href' => RC_Uri::url('finance/admin_account_log/init', array('account_type' => 'rank_points', 'user_id' => $user_id)), 'text' => '查看成长值变动'));
+
+        $this->assign('form_action', RC_Uri::url('finance/admin_account_log/update'));
+
+        $user = get_user_info($user_id);
+        if ($user['user_rank'] == 0) {
+            //重新计算会员等级
+            $row_rank = RC_Api::api('user', 'update_user_rank', array('user_id' => $user['user_id']));
+        } else {
+            $row_rank = RC_DB::table('user_rank')->where('rank_id', $user['user_rank'])->first();
+        }
+        $user['user_rank_name'] = $row_rank['rank_name'];
+
+        $this->assign('user', $user);
+
+        $this->display('account_points.dwt');
+    }
+
+    public function minus_rank_points()
+    {
+        $this->admin_priv('account_manage');
+
+        $user_id = intval($_GET['user_id']);
+        $this->assign('user_id', $user_id);
+        $this->assign('type', 'minus_rank_points');
+
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here('减少会员成长值'));
+
+        $this->assign('ur_here', '减少会员成长值');
+        $this->assign('action_link', array('href' => RC_Uri::url('finance/admin_account_log/init', array('account_type' => 'rank_points', 'user_id' => $user_id)), 'text' => '查看成长值变动'));
+
+        $this->assign('form_action', RC_Uri::url('finance/admin_account_log/update'));
+
+        $user = get_user_info($user_id);
+        if ($user['user_rank'] == 0) {
+            //重新计算会员等级
+            $row_rank = RC_Api::api('user', 'update_user_rank', array('user_id' => $user['user_id']));
+        } else {
+            $row_rank = RC_DB::table('user_rank')->where('rank_id', $user['user_rank'])->first();
+        }
+        $user['user_rank_name'] = $row_rank['rank_name'];
+
+        $this->assign('user', $user);
+
+        $this->display('account_points.dwt');
+    }
+
     /**
      * 调节会员账户
      */
@@ -192,114 +294,57 @@ class admin_account_log extends ecjia_admin
     {
         $this->admin_priv('account_manage', ecjia::MSGTYPE_JSON);
 
-        $user_id = empty($_REQUEST['user_id']) ? 0 : intval($_REQUEST['user_id']);
-        $user    = get_user_info($user_id);
+        $user_id     = empty($_POST['user_id']) ? 0 : intval($_POST['user_id']);
+        $user        = get_user_info($user_id);
+        $type        = trim($_POST['type']);
+        $change_desc = RC_String::sub_str($_POST['change_desc'], 255, false);
 
         if (empty($user)) {
             return $this->showmessage(RC_Lang::get('user::account_log.user_not_exist'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
         }
 
-        $user_money   = !empty($_POST['user_money']) ? $_POST['user_money'] : 0;
-        $frozen_money = !empty($_POST['frozen_money']) ? $_POST['frozen_money'] : 0;
-        $rank_points  = !empty($_POST['rank_points']) ? $_POST['rank_points'] : 0;
-        $pay_points   = !empty($_POST['pay_points']) ? $_POST['pay_points'] : 0;
+        $pay_points  = 0;
+        $rank_points = 0;
+        if ($type == 'add_pay_points' || $type == 'minus_pay_points') {
+            $pay_points = !empty($_POST['pay_points']) ? $_POST['pay_points'] : 0;
 
-        /* 参数验证 */
-        if ($user_money < 0 || !is_numeric($user_money) || !isset($user_money)) {
-            return $this->showmessage(RC_Lang::get('user::account_log.user_money_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-        }
-        if ($frozen_money < 0 || !is_numeric($frozen_money) || !isset($frozen_money)) {
-            return $this->showmessage(RC_Lang::get('user::account_log.frozen_money_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-        }
-        if ($rank_points < 0 || !is_numeric($rank_points) || !isset($rank_points)) {
-            return $this->showmessage(RC_Lang::get('user::account_log.rank_points_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-        }
-        if ($pay_points < 0 || !is_numeric($pay_points) || !isset($pay_points)) {
-            return $this->showmessage(RC_Lang::get('user::account_log.pay_points_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-        }
+            if ($pay_points <= 0 || !is_numeric($pay_points) || !isset($pay_points)) {
+                return $this->showmessage('会员积分填写有误', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+            }
+            if ($type == 'add_pay_points') {
+                $pay_points = floatval(1) * abs(floatval($pay_points));
+            } else {
+                if ($pay_points > $user['pay_points']) {
+                    return $this->showmessage('减少会员积分数不能大于当前账户积分', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                }
+                $pay_points = floatval(-1) * abs(floatval($pay_points));
+            }
+            ecjia_admin::admin_log($user['user_name'] . '，' . '积分' . $pay_points . '，' . '帐户变动原因是：' . $change_desc, 'edit', 'pay_points');
 
-        if ($user_money == 0 && $frozen_money == 0 && $rank_points == 0 && $pay_points == 0) {
-            return $this->showmessage(RC_Lang::get('user::account_log.null_msg'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
-        }
+            $pjax_url = RC_Uri::url('finance/admin_account_log/init', array('account_type' => 'pay_points', 'user_id' => $user_id));
 
-        $change_desc  = RC_String::sub_str($_POST['change_desc'], 255, false);
-        $user_money   = floatval($_POST['add_sub_user_money']) * abs(floatval($user_money));
-        $frozen_money = floatval($_POST['add_sub_frozen_money']) * abs(floatval($frozen_money));
-        $rank_points  = floatval($_POST['add_sub_rank_points']) * abs(floatval($rank_points));
-        $pay_points   = floatval($_POST['add_sub_pay_points']) * abs(floatval($pay_points));
+        } elseif ($type == 'add_rank_points' || $type == 'minus_rank_points') {
+            $rank_points = !empty($_POST['rank_points']) ? $_POST['rank_points'] : 0;
 
-        if ($_POST['add_sub_user_money'] == 1) {
-            $usermoney = '+';
-        } else {
-            $usermoney = '-';
-        }
-
-        if ($_POST['add_sub_frozen_money'] == 1) {
-            $frozenmoney = '+';
-        } else {
-            $frozenmoney = '-';
-        }
-
-        if ($_POST['add_sub_rank_points'] == 1) {
-            $rankpoints = '+';
-        } else {
-            $rankpoints = '-';
-        }
-
-        if ($_POST['add_sub_pay_points'] == 1) {
-            $paypoints = '+';
-        } else {
-            $paypoints = '-';
-        }
-
-        /* 保存 */
-        change_account_log($user_id, $user_money, $frozen_money, $rank_points, $pay_points, $change_desc, ACT_ADJUSTING);
-        if (!empty($user_money) && $_POST['add_sub_user_money'] == 1) {
-            $user_info = RC_DB::table('users')->where('user_id', $user_id)->select('user_name', 'user_money', 'mobile_phone')->first();
-            /* 短信告知用户账户变动 */
-            if (!empty($user_info['mobile_phone'])) {
-                $options = array(
-                    'mobile' => $user_info['mobile_phone'],
-                    'event'  => 'sms_user_account_change',
-                    'value'  => array(
-                        'user_name'     => $user_info['user_name'],
-                        'amount'        => $user_money,
-                        'user_money'    => $user_info['user_money'],
-                        'service_phone' => ecjia::config('service_phone'),
-                    ),
-                );
-                RC_Api::api('sms', 'send_event_sms', $options);
+            if ($rank_points <= 0 || !is_numeric($rank_points) || !isset($rank_points)) {
+                return $this->showmessage(RC_Lang::get('user::account_log.rank_points_error'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
             }
 
-            //消息通知
-            $orm_user_db = RC_Model::model('orders/orm_users_model');
-            $user_ob     = $orm_user_db->find($user_id);
+            if ($type == 'add_rank_points') {
+                $rank_points = floatval(1) * abs(floatval($rank_points));
+            } else {
+                if ($rank_points > $user['rank_points']) {
+                    return $this->showmessage('减少会员成长值不能大于当前账户成长值', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+                }
+                $rank_points = floatval(-1) * abs(floatval($rank_points));
+            }
+            ecjia_admin::admin_log($user['user_name'] . '，' . '成长值' . $rank_points . '，' . '帐户变动原因是：' . $change_desc, 'edit', 'rank_points');
 
-            $user_account_data = array(
-                'title' => '充值到账',
-                'body'  => '尊敬的' . $user_info['user_name'] . '，充值业务已受理成功，充值金额' . $user_money . '元资金已到账，目前可用资金' . $user_info['user_money'] . '元。',
-                'data'  => array(
-                    'user_id'              => $user_id,
-                    'user_name'            => $user_info['user_name'],
-                    'amount'               => $user_money,
-                    'formatted_amount'     => price_format($user_money),
-                    'user_money'           => $user_info['user_money'],
-                    'formatted_user_money' => price_format($user_info['user_money']),
-                ),
-            );
-
-            $push_account_chenged = new UserAccountChange($user_account_data);
-            RC_Notification::send($user_ob, $push_account_chenged);
+            $pjax_url = RC_Uri::url('finance/admin_account_log/init', array('account_type' => 'rank_points', 'user_id' => $user_id));
         }
+        change_account_log($user_id, 0, 0, $rank_points, $pay_points, $change_desc, ACT_ADJUSTING);
 
-        ecjia_admin::admin_log($user['user_name'] . '，' . RC_Lang::get('user::account_log.usermoney') . $usermoney . $user_money .
-            RC_Lang::get('user::account_log.frozenmoney') . $frozenmoney . $frozen_money .
-            RC_Lang::get('user::account_log.rankpoints') . $rankpoints . $rank_points .
-            RC_Lang::get('user::account_log.paypoints') . $paypoints . $pay_points . '，' .
-            RC_Lang::get('user::account_log.change_desc') . $change_desc, 'edit', 'usermoney');
-
-        $links[] = array('href' => RC_Uri::url('finance/admin_account_log/init', array('user_id' => $user_id)), 'text' => RC_Lang::get('user::account_log.account_list'));
-        return $this->showmessage(RC_Lang::get('user::account_log.log_account_change_ok'), ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => RC_Uri::url('finance/admin_account_log/edit', array('user_id' => $user_id)), 'links' => $links));
+        return $this->showmessage('操作成功', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_SUCCESS, array('pjaxurl' => $pjax_url));
     }
 }
 
