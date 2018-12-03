@@ -73,7 +73,7 @@ class finance_refund_back_pay_points_api extends Component_Event_Api {
         			//退还下单使用的积分
         			$options = array(
         					'user_id' 		=> $refund_info['user_id'],
-        					'point' 	=> intval($refund_info['integral']) * (-1),
+        					'point' 	    => intval($refund_info['integral']),
         					'change_desc' 	=> '订单退款，退还订单' . $refund_info['order_sn'] . '下单时使用的积分',
         					'change_type' 	=> ACT_REFUND,
         					'from_type' 	=> 'refund_back_integral',
