@@ -508,7 +508,8 @@ class admin_account extends ecjia_admin
         }
 
         if ($filter['keywords']) {
-            $db_user_account->where(RC_DB::raw('u.user_name'), 'like', '%' . mysql_like_quote($filter['keywords']) . '%');
+            $db_user_account->where(RC_DB::raw('u.user_name'), 'like', '%' . mysql_like_quote($filter['keywords']) . '%')
+                ->orWhere(RC_DB::raw('u.mobile_phone'), 'like', '%' . mysql_like_quote($filter['keywords']) . '%');
         }
 
         if (!empty($filter['start_date'])) {

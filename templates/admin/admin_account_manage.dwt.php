@@ -157,7 +157,7 @@
                             <!-- {if $val.user_money gt 0} -->
                             <span class="ecjiafc-0000FF">+{$val.user_money}</span>
                             <!-- {elseif $val.user_money lt 0} -->
-                            <span class="ecjiafc-FF0000">{$val.user_money}</span>
+                            <span class="ecjiafc-red">{$val.user_money}</span>
                             <!-- {else} -->
                             {$val.user_money}
                             <!-- {/if} -->
@@ -166,7 +166,7 @@
                             <!-- {if $val.rank_points gt 0} -->
                             <span class="ecjiafc-0000FF">+{$val.rank_points}</span>
                             <!-- {elseif $val.rank_points lt 0} -->
-                            <span class="ecjiafc-FF0000">{$val.rank_points}</span>
+                            <span class="ecjiafc-red">{$val.rank_points}</span>
                             <!-- {else} -->
                             {$val.rank_points}
                             <!-- {/if} -->

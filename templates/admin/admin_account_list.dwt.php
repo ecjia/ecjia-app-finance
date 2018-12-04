@@ -74,7 +74,9 @@
 			<select class="w120" name="payment">
 				<option value="">充值方式</option>
 				<!-- {foreach from=$payment item=item} -->
+				{if $item.pay_code neq 'pay_balance'}
 				<option value="{$item.pay_code}" {if $smarty.get.payment eq $item.pay_code} selected {/if}>{$item.pay_name} </option>
+				{/if}
 				 <!-- {/foreach} -->
 			</select>
 			<span class="f_l">申请时间：</span>
@@ -93,13 +95,13 @@
 			<thead>
 				<tr>
 					<th class="table_checkbox"><input type="checkbox" data-toggle="selectall" data-children=".checkbox" /></th>
-					<th class="w100">{lang key='user::user_account.order_sn'}</th>
-					<th>{lang key='user::user_account.user_id'}</th>
-					<th>充值金额</th>
-					<th>充值方式</th>
-					<th class="w130">申请时间</th>
-					<th class="w80">处理状态</th>
-					<th class="w50">{lang key='system::system.handler'}</th>
+					<th class="w130">{lang key='user::user_account.order_sn'}</th>
+					<th class="w150">{lang key='user::user_account.user_id'}</th>
+					<th class="w130">充值金额</th>
+					<th class="w130">充值方式</th>
+					<th class="w150">申请时间</th>
+					<th class="w130">处理状态</th>
+					<th class="w80">{lang key='system::system.handler'}</th>
 				</tr>
 			</thead>
 			<tbody>

@@ -22,15 +22,15 @@
 		<div class="account_info">
 			<div class="item">
 				{if $account_type eq 'user_money'}
-				<span>当前账户可用余额：<span class="ecjiafc-FF0000">{$user.formated_user_money}</span></span>
-				<span class="m_l30">冻结资金：<span class="ecjiafc-FF0000">{$user.formated_frozen_money}</span></span>
+				<span>当前账户可用余额：<span class="ecjiafc-red">{$user.formated_user_money}</span></span>
+				<span class="m_l30">冻结资金：<span class="ecjiafc-red">{$user.formated_frozen_money}</span></span>
 
 				{else if $account_type eq 'pay_points'}
-				<span>当前账户积分：<span class="ecjiafc-FF0000">{$user.pay_points}</span></span>
+				<span>当前账户积分：<span class="ecjiafc-red">{$user.pay_points}</span></span>
 				
 				{else if $account_type eq 'rank_points'}
-				<span>当前账户成长值：<span class="ecjiafc-FF0000">{$user.rank_points}</span></span>
-				<span class="m_l30">所属会员等级：</span><span class="ecjiafc-FF0000">{if $user.user_rank_name}{$user.user_rank_name}{else}暂无{/if}</span></span>
+				<span>当前账户成长值：<span class="ecjiafc-red">{$user.rank_points}</span></span>
+				<span class="m_l30">所属会员等级：</span><span class="ecjiafc-red">{if $user.user_rank_name}{$user.user_rank_name}{else}暂无{/if}</span></span>
 				{/if}
 			</div>
 			<div class="item">
@@ -84,7 +84,7 @@
 						<!-- {if $account.user_money gt 0} -->
 						<span class="ecjiafc-0000FF">+{$account.user_money}</span>
 						<!-- {elseif $account.user_money lt 0} -->
-						<span class="ecjiafc-FF0000">{$account.user_money}</span>
+						<span class="ecjiafc-red">{$account.user_money}</span>
 						<!-- {else} -->
 						{$account.user_money}
 						<!-- {/if} -->
@@ -92,7 +92,7 @@
 						<!-- {if $account.pay_points gt 0} -->
 						<span class="ecjiafc-0000FF">+{$account.pay_points}</span>
 						<!-- {elseif $account.pay_points lt 0} -->
-						<span class="ecjiafc-FF0000">{$account.pay_points}</span>
+						<span class="ecjiafc-red">{$account.pay_points}</span>
 						<!-- {else} -->
 						{$account.pay_points}
 						<!-- {/if} -->
@@ -100,7 +100,7 @@
 						<!-- {if $account.rank_points gt 0} -->
 						<span class="ecjiafc-0000FF">+{$account.rank_points}</span>
 						<!-- {elseif $account.rank_points lt 0} -->
-						<span class="ecjiafc-FF0000">{$account.rank_points}</span>
+						<span class="ecjiafc-red">{$account.rank_points}</span>
 						<!-- {else} -->
 						{$account.rank_points}
 						<!-- {/if} -->

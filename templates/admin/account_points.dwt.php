@@ -30,7 +30,7 @@
 				{if $type eq 'add_pay_points' || $type eq 'minus_pay_points'}
 				<div class="control-group formSep">
 					<label class="control-label">当前账户积分：</label>
-					<div class="controls l_h30 ecjiafc-FF0000 f_s15">{$user.pay_points}</div>
+					<div class="controls l_h30 ecjiafc-red f_s15">{$user.pay_points}</div>
 				</div>
 				
 				<div class="control-group formSep">
@@ -44,7 +44,7 @@
 				{if $type eq 'add_rank_points' || $type eq 'minus_rank_points'}
 				<div class="control-group formSep">
 					<label class="control-label">当前账户成长值：</label>
-					<div class="controls l_h30 ecjiafc-FF0000 f_s15">{$user.rank_points}</div>
+					<div class="controls l_h30 ecjiafc-red f_s15">{$user.rank_points}</div>
 				</div>
 
 				<div class="control-group formSep">
