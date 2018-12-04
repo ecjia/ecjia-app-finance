@@ -529,6 +529,7 @@ class admin_account extends ecjia_admin
 
         if ($return_all) {
             $list = $db_user_account
+                ->where(RC_DB::raw('ua.is_paid'), 0)
                 ->orderBy(RC_DB::raw($filter['sort_by']), $filter['sort_order'])
                 ->select(RC_DB::raw('ua.*'), RC_DB::raw('u.user_name'))
                 ->get();
