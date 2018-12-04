@@ -70,7 +70,7 @@
 								{/if}
 							</td>
 							<td><div align="right"><strong>充值金额：</strong></div></td>
-							<td>￥{$account_info.amount}{lang key='user::user_account.yuan'}</td>				
+							<td>{$account_info.formated_amount}{lang key='user::user_account.yuan'}</td>				
 						</tr>
 
 						<tr>
@@ -78,11 +78,6 @@
 							<td>{if $account_info.pay_name}{$account_info.pay_name}{/if}</td>
 							<td><div align="right"><strong>申请时间：</strong></div></td>
 							<td>{$account_info.add_time}</td>
-						</tr>
-
-						<tr>
-							<td><div align="right"><strong>会员描述：</strong></div></td>
-							<td colspan="3">{$account_info.user_note}</td>
 						</tr>
 
 					</tbody>

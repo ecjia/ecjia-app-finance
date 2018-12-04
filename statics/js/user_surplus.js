@@ -9,6 +9,8 @@
                 container: '.main_content',
             });
 
+            $('[data-toggle="tooltip"]').tooltip();
+
             $(".select-button").off('click').click(function () {
                 var year = $("select[name='year']").val(); //开始时间
                 var month = $("select[name='month']").val(); //结束时间

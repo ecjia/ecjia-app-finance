@@ -74,7 +74,7 @@
                     <div class="item-bottom">{$account.to_cash_amount}</div>
                 </div>
                 <div class="right-item">
-                    <div class="item-top">冻结（元）</div>
+                    <div class="item-top">冻结（元）<span class="fontello-icon-help-circled" data-toggle="tooltip" title="用户申请提现后，暂时还没有被审核。"></span></div>
                     <div class="item-bottom">{$account.frozen_money}</div>
                 </div>
                 <div class="right-item">
@@ -91,11 +91,12 @@
                     <div class="item-bottom">{$account.pay_points}</div>
                 </div>
                 <div class="right-item">
-                    <div class="item-top">积分抵现</div>
+                    <div class="item-top">积分抵现<span class="fontello-icon-help-circled" data-toggle="tooltip" title="用户下单使用积分抵消订单金额。"></span></div>
                     <div class="item-bottom">{$account.integral}</div>
                 </div>
                 <div class="right-item">
-                    <div class="item-top">总发放积分</div>
+                    <div class="item-top">总发放积分<span class="fontello-icon-help-circled" data-toggle="tooltip" title="管理员向用户发放的总积分数，
+ 包括用户参与活动所获得的积分。"></span></div>
                     <div class="item-bottom">{$account.total_points}</div>
                 </div>
             </div>
