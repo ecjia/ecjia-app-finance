@@ -107,7 +107,7 @@
 					{/if}
 					</td>
 
-					<td></td>
+					<td><a href="{RC_Uri::url('orders/admin/info')}&order_sn={$account.from_value}" target="__blank">{$account.from_value}</td>
 				</tr>
 				<!-- {foreachelse} -->
 				<tr><td class="no-records" colspan="4">{lang key='system::system.no_records'}</td></tr>

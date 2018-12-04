@@ -196,6 +196,15 @@ class admin_account extends ecjia_admin
 
         $accountid = RC_DB::table('user_account')->insertGetId($data);
 
+        /* 插入支付流水记录*/
+        RC_Api::api('payment', 'save_payment_record', [
+            'order_sn' 		 => $order_sn,
+            'total_fee'      => $amount,
+            'trade_type'	 => 'recharge',
+            'pay_code'       => $payment,
+            'pay_name'       => '现金支付'
+        ]);
+
         /* 更新会员余额数量 */
         $change_desc = $amount > 0 ? RC_Lang::get('user::user_account.surplus_type.0') : RC_Lang::get('user::user_account.surplus_type.1');
         $change_type = $amount > 0 ? ACT_SAVING : ACT_DRAWING;

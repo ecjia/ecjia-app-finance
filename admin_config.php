@@ -89,6 +89,9 @@ class admin_config extends ecjia_admin
 
         $withdraw_fee        = !empty($_POST['withdraw_fee']) ? floatval($_POST['withdraw_fee']) : 0;
         $withdraw_min_amount = !empty($_POST['withdraw_min_amount']) ? floatval($_POST['withdraw_min_amount']) : 0;
+        if ($withdraw_min_amount < 0) {
+            return $this->showmessage('最小提现金额不能小于0', ecjia::MSGTYPE_JSON | ecjia::MSGSTAT_ERROR);
+        }
 
         ecjia_config::instance()->write_config('withdraw_fee', $withdraw_fee);
         ecjia_config::instance()->write_config('withdraw_min_amount', $withdraw_min_amount);
