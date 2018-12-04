@@ -64,11 +64,6 @@ class finance_pay_points_change_api extends Component_Event_Api {
      */
     public function call(& $options)
     {
-    	
-    	RC_Logger::getLogger('error')->info('testiii');
-    	RC_Logger::getLogger('error')->info($options);
-    	RC_Logger::getLogger('error')->info('testlll');
-    	
         if (!array_get($options, 'point') || !array_get($options, 'change_desc') || !array_get($options, 'user_id')) {
             return new ecjia_error('invalid_parameter', '请求接口finance_pay_points_change_api参数无效');
         }
