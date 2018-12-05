@@ -193,6 +193,7 @@ class admin_account extends ecjia_admin
             'from_type'    => 'admin',
             'from_value'   => $_SESSION['admin_id'],
             'paid_time'    => RC_Time::gmtime(),
+            'review_time'  => RC_Time::gmtime(),
         );
 
         $accountid = RC_DB::table('user_account')->insertGetId($data);
@@ -434,6 +435,7 @@ class admin_account extends ecjia_admin
         $account_info['user_note']       = htmlspecialchars($account_info['user_note']);
         $account_info['add_time']        = RC_Time::local_date(ecjia::config('time_format'), $account_info['add_time']);
         $account_info['pay_time']        = RC_Time::local_date(ecjia::config('time_format'), $account_info['paid_time']);
+        $account_info['review_time']     = RC_Time::local_date(ecjia::config('time_format'), $account_info['review_time']);
 
         //订单流程状态
         if ($account_info['is_paid'] == 0) {
