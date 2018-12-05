@@ -77,8 +77,9 @@ class admin_account extends ecjia_admin
         RC_Script::enqueue_script('jquery-uniform');
         RC_Style::enqueue_style('uniform-aristo');
         RC_Script::enqueue_script('admin_account', RC_App::apps_url('statics/js/admin_account.js', __FILE__));
-
         RC_Style::enqueue_style('admin_finance', RC_App::apps_url('statics/css/admin_finance.css', __FILE__), array());
+
+        RC_Script::enqueue_script('koala', RC_App::apps_url('statics/js/koala.js', __FILE__));
 
         $account_jslang = array(
             'keywords_required' => RC_Lang::get('user::user_account.keywords_required'),
@@ -570,8 +571,11 @@ class admin_account extends ecjia_admin
             foreach ($list as $key => $value) {
                 $list[$key]['surplus_amount'] = ecjia_price_format(abs($value['amount']), false);
                 $list[$key]['add_date']       = RC_Time::local_date(ecjia::config('time_format'), $value['add_time']);
-                $list[$key]['payment']        = empty($pay_name[$value['payment']]) ? strip_tags($value['payment']) : strip_tags($pay_name[$value['payment']]);
-
+                if ($value['payment'] == 'pay_cash') {
+                    $list[$key]['payment'] = '现金支付';
+                } else {
+                    $list[$key]['payment'] = empty($pay_name[$value['payment']]) ? strip_tags($value['payment']) : strip_tags($pay_name[$value['payment']]);
+                }
                 $arr[$key]['order_sn']       = $list[$key]['order_sn'];
                 $arr[$key]['user_name']      = $list[$key]['user_name'];
                 $arr[$key]['surplus_amount'] = $list[$key]['surplus_amount'];

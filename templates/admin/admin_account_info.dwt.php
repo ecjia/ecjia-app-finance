@@ -20,23 +20,24 @@
 <div class="order-status-base m_b20">
 	<ul class="">
 		<li class="step-first">
-			<div class="{if $is_paid neq '1'}step-cur{else}step-done{/if}">
-				<div class="step-no">{if $account_info.is_paid neq '1'}1{/if}</div>
-				<div class="m_t5">{if $account_info.is_paid eq '0'}未确认{else if $account_info.is_paid eq '1'}已确认{else if $account_info.is_paid eq '2'}<span class="ecjiafc-red">已取消</span>{/if}</div>
-				<div class="m_t5 ecjiafc-blue">{if $account_info.is_paid neq '2'}{$account_info.add_time}{/if}</div>
+			<div class="{if $is_paid neq 1}step-cur{else}step-done{/if}">
+				<div class="step-no">{if $account_info.is_paid neq 1}1{/if}</div>
+				<div class="m_t5">{if $account_info.is_paid eq 0}未确认{else if $account_info.is_paid eq 1}已确认{else if $account_info.is_paid eq 2}<span class="ecjiafc-red">已取消</span>{/if}</div>
+				<div class="m_t5 ecjiafc-blue">{if $account_info.is_paid neq 2}{$account_info.add_time}{else}{$account_info.review_time}{/if}</div>
 			</div>
 		</li>
 		<li>
-			<div class="{if $is_paid eq '1'}step-done{/if}">
+			<div class="{if $is_paid eq 1}step-done{/if}">
 				<div class="step-no">2</div>
-				<div class="m_t5">{if $account_info.is_paid eq '1'}已付款{else}未付款{/if}</div>
+				<div class="m_t5">{if $account_info.is_paid eq 1}已付款{else}未付款{/if}</div>
 				<div class="m_t5 ecjiafc-blue">{$account_info.pay_time}</div>
 			</div>
 		</li>
 		<li class="step-last">
-			<div class="{if $is_paid eq '1'}step-cur{else}step-done{/if}">
+			<div class="{if $is_paid eq 1}step-cur{else}step-done{/if}">
 				<div class="step-no">3</div>
-				<div class="m_t5">{if $account_info.is_paid eq '1'}已完成{else}未完成{/if}</div>
+				<div class="m_t5">{if $account_info.is_paid eq 1}已完成{else}未完成{/if}</div>
+				<div class="m_t5 ecjiafc-blue">{$account_info.review_time}</div>
 			</div>
 		</li>
 	</ul>
@@ -97,7 +98,7 @@
 				</div>
 			</div>
 			<div class="accordion-body in collapse" id="telescopic2">
-				<form class="form-horizontal" method="post" action="{if $account_info.is_paid neq '1'}{$check_action}{else}{$form_action}{/if}" name="theForm">
+				<form class="form-horizontal" method="post" action="{if $account_info.is_paid neq 1}{$check_action}{else}{$form_action}{/if}" name="theForm">
 					<table class="table table-oddtd m_b0">
 						<tbody class="first-td-no-leftbd">
 							<tr>
@@ -139,7 +140,7 @@
 							<td><div align="right"><strong>操作人：</strong></div></td>
 							<td>{$account_info.admin_user}</td>
 							<td><div align="right"><strong>审核时间：</strong></div></td>
-							<td></td>
+							<td>{$account_info.review_time}</td>
 						</tr>
 						<tr>
 							<td><div align="right"><strong>审核备注：</strong></div></td>

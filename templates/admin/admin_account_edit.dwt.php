@@ -35,6 +35,7 @@
 						 type="text" value="{if $user_mobile}{$user_mobile}{else if $smarty.get.id}匿名会员{else}{/if}" {if
 						 $user_surplus.is_paid} readonly="true" {/if} />
 						<span class="input-must">{lang key='system::system.require_field'}</span>
+						<div class="help-block">输入正确手机号，查询会员基本信息。</div>
 					</div>
 				</div>
 

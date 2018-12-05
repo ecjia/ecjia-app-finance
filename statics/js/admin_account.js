@@ -65,24 +65,29 @@
         },
 
         validate: function () {
-            $(".user-mobile").blur(function () {
-                var $this = $(this);
-                var url = $this.attr('action');
-                var mobile = $this.val();
-                var data = {
-                    user_mobile: mobile,
+            $(".user-mobile").koala({
+                delay: 500,
+                keyup: function (event) {
+                    var $this = $(this);
+                    var url = $this.attr('action');
+                    var mobile = $this.val();
+                    if (mobile.length < 11) {
+                        return false;
+                    }
+                    var data = {
+                        user_mobile: mobile,
+                    }
+                    $.post(url, data, function (data) {
+                        if (data.state == 'error') {
+                            ecjia.admin.showmessage(data);
+                        }
+    
+                        if (data.status == 1) {
+                            $(".user").removeClass("username");
+                            $(".userinfo").find('span').html(data.username);
+                        }
+                    }, 'json');
                 }
-
-                $.post(url, data, function (data) {
-                    if (data.state == 'error') {
-                        ecjia.admin.showmessage(data);
-                    }
-
-                    if (data.status == 1) {
-                        $(".user").removeClass("username");
-                        $(".userinfo").find('span').html(data.username);
-                    }
-                }, 'json');
             });
         },
 
