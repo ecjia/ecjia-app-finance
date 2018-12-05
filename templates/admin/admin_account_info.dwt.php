@@ -71,7 +71,7 @@
 								{/if}
 							</td>
 							<td><div align="right"><strong>充值金额：</strong></div></td>
-							<td>{$account_info.formated_amount}{lang key='user::user_account.yuan'}</td>				
+							<td>{$account_info.formated_amount}</td>				
 						</tr>
 
 						<tr>
