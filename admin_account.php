@@ -477,7 +477,8 @@ class admin_account extends ecjia_admin
 
     public function download()
     {
-        $data = $this->get_recharge_list(true);
+        $type = trim($_GET['type']);
+        $data = $this->get_recharge_list(true, $type);
 
         RC_Excel::load(RC_APP_PATH . 'finance' . DIRECTORY_SEPARATOR . 'statics/files/recharge.xls', function ($excel) use ($data) {
             $excel->sheet('First sheet', function ($sheet) use ($data) {
@@ -491,7 +492,7 @@ class admin_account extends ecjia_admin
     /**
      * 获取充值列表
      */
-    private function get_recharge_list($return_all = false)
+    private function get_recharge_list($return_all = false, $down_type = '')
     {
         $filter['payment']    = trim($_GET['payment']);
         $filter['start_date'] = empty($_GET['start_date']) ? '' : $_GET['start_date'];
@@ -538,8 +539,10 @@ class admin_account extends ecjia_admin
         }
 
         if ($return_all) {
+            if (!empty($down_type)) {
+                $db_user_account->where(RC_DB::raw('ua.is_paid'), 1);
+            }
             $list = $db_user_account
-                ->where(RC_DB::raw('ua.is_paid'), 0)
                 ->orderBy(RC_DB::raw($filter['sort_by']), $filter['sort_order'])
                 ->select(RC_DB::raw('ua.*'), RC_DB::raw('u.user_name'))
                 ->get();

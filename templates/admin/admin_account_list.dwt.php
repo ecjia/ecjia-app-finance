@@ -12,8 +12,8 @@
 	<h3 class="heading">
 		<!-- {if $ur_here}{$ur_here}{/if} -->
 
-		{if !$filter.type}
-		<a class="btn plus_or_reply" href="{RC_Uri::url('finance/admin_account/download')}"><i class="fontello-icon-download"></i>导出Excel</a>
+		{if $filter.type eq 'finished'}
+		<a class="btn plus_or_reply" href="{RC_Uri::url('finance/admin_account/download')}&type=finished"><i class="fontello-icon-download"></i>导出Excel</a>
 		{/if}
 
 		<!-- {if $action_link} -->
