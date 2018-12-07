@@ -361,7 +361,7 @@ function get_account_log($user_id, $num = 15, $start, $process_type = '') {
  * 取得帐户明细
  * @param   int     $user_id    用户id
  * @param   string  $account_type   帐户类型：空表示所有帐户，user_money表示可用资金，
- *                  frozen_money表示冻结资金，rank_points表示等级积分，pay_points表示消费积分
+ *                  frozen_money表示冻结资金，rank_points表示成长值，pay_points表示消费积分
  * @return  array
  */
 function get_account_log_list($user_id, $account_type = '', $date = []) {
@@ -543,7 +543,7 @@ function get_rank_list() {
  * @param float $frozen_money
  *        	冻结余额变动
  * @param int $rank_points
- *        	等级积分变动
+ *        	成长值变动
  * @param int $pay_points
  *        	消费积分变动
  * @param string $change_desc
@@ -735,7 +735,7 @@ function EM_user_info($user_id) {
 	$allow_comment_count = $db_orderinfo_view->join(array('order_goods', 'goods', 'comment'))->where(array('oi.user_id' => $user_id, 'oi.shipping_status' => SS_RECEIVED, 'oi.order_status' => array(OS_CONFIRMED, OS_SPLITED), 'oi.pay_status' => array(PS_PAYED, PS_PAYING), 'c.comment_id is null'))->count('DISTINCT oi.order_id');
 	/* 取得用户等级 */
 // 	if ($user_info['user_rank'] == 0) {
-// 		// 非特殊等级，根据等级积分计算用户等级（注意：不包括特殊等级）
+// 		// 非特殊等级，根据成长值计算用户等级（注意：不包括特殊等级）
 // 		$row = $db_user_rank->field('rank_id, rank_name')->find(array('special_rank' => 0 , 'min_points' => array('elt' => intval($user_info['rank_points'])) , 'max_points' => array('gt' => intval($user_info['rank_points']))));
 // 	} else {
 // 		// 特殊等级
