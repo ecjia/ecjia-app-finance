@@ -66,6 +66,8 @@ class finance_user_remove_cleardata_api extends Component_Event_Api
         return [
             new \Ecjia\App\Finance\UserCleanHandlers\UserMoneyClear($user_id),
             new \Ecjia\App\Finance\UserCleanHandlers\UserTradingRecordClear($user_id),
+            new \Ecjia\App\Finance\UserCleanHandlers\UserFinanceInvoiceClear($user_id),
+            new \Ecjia\App\Finance\UserCleanHandlers\UserAccountLogClear($user_id),
         ];
     }
 
