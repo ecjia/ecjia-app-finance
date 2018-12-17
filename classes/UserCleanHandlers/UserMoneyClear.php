@@ -40,9 +40,9 @@ class UserMoneyClear extends UserCleanAbstract
      */
     public function handlePrintData()
     {
-        $user_money = $this->handleCount();
+        $user_info = RC_Api::api('user', 'user_info', array('user_id' => $this->user_id));
 
-        $user_money = ecjia_price_format($user_money);
+        $user_money = $user_info['formated_user_money'];
 
         $url = RC_Uri::url('finance/admin_account_log/init', array('account_type' => 'user_money', 'user_id' => $this->user_id));
 
@@ -65,7 +65,7 @@ HTML;
     {
         $user_info = RC_Api::api('user', 'user_info', array('user_id' => $this->user_id));
 
-        return $user_info['user_money'];
+        return $user_info['user_money'] != 0 ? 1 : 0;
     }
 
 
