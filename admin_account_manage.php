@@ -299,6 +299,13 @@ class admin_account_manage extends ecjia_admin
             ->where(RC_DB::raw('a.change_time'), '>=', $start_date)
             ->where(RC_DB::raw('a.change_time'), '<', $end_date);
 
+        $type = trim($_GET['type']);
+        if ($type == 'points') {
+            $db_account_log->where(RC_DB::raw('a.rank_points'), '!=', 0);
+        } else {
+            $db_account_log->where(RC_DB::raw('a.user_money'), '!=', 0)->orWhere(RC_DB::raw('a.frozen_money'), '!=', 0);
+        }
+
         $count = $db_account_log->count();
 
         $page = new ecjia_page($count, 15, 6);
