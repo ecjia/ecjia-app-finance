@@ -37,6 +37,8 @@ class UserAccountBalance
             'from_type' => $from_type,
             'from_value' => $from_value,
         ];
+
+        return $this->transactionChangeAccountBalance($data);
     }
 
     /**
@@ -56,6 +58,8 @@ class UserAccountBalance
             'from_type' => $from_type,
             'from_value' => $from_value,
         ];
+
+        return $this->transactionChangeAccountBalance($data);
     }
 
     /**
@@ -75,6 +79,8 @@ class UserAccountBalance
             'from_type' => $from_type,
             'from_value' => $from_value,
         ];
+
+        return $this->transactionChangeAccountBalance($data);
     }
 
     /**
@@ -94,6 +100,8 @@ class UserAccountBalance
             'from_type' => $from_type,
             'from_value' => $from_value,
         ];
+
+        return $this->transactionChangeAccountBalance($data);
     }
 
     /**
