@@ -20,6 +20,28 @@ class UserAccountBalance
         $this->user_id = $user_id;
     }
 
+
+    /**
+     * 获取用户账户余额
+     * @return float 用户账户余额
+     */
+    public function getUserMoney()
+    {
+        $user_money = RC_DB::table('users')->where('user_id', $this->user_id)->pluck('user_money');
+        return $user_money ?: 0.00;
+    }
+
+    /**
+     * 获取用户冻结金额
+     * @return float
+     */
+    public function getFrozenMoney()
+    {
+        $frozen_money = RC_DB::table('users')->where('user_id', $this->user_id)->pluck('frozen_money');
+        return $frozen_money ?: 0.00;
+    }
+
+
     /**
      * 账户充值
      * 向用户资金里充入余额
