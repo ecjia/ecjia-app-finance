@@ -49,6 +49,7 @@ class UserAccountBalance
     public function charge($user_money, $change_desc = null, $from_type = null, $from_value = null)
     {
         $data = [
+            'user_id' => $this->user_id,
             'user_money' => $user_money,
 
             'frozen_money' => 0,
@@ -70,6 +71,7 @@ class UserAccountBalance
     public function withdrawApply($user_money, $change_desc = null, $from_type = null, $from_value = null)
     {
         $data = [
+            'user_id' => $this->user_id,
             'user_money' => -$user_money,
 
             'frozen_money' => $user_money,
@@ -91,6 +93,7 @@ class UserAccountBalance
     public function withdrawSuccessful($user_money, $change_desc = null, $from_type = null, $from_value = null)
     {
         $data = [
+            'user_id' => $this->user_id,
             'user_money' => 0,
 
             'frozen_money' => -$user_money,
@@ -112,6 +115,7 @@ class UserAccountBalance
     public function withdrawCancel($user_money, $change_desc = null, $from_type = null, $from_value = null)
     {
         $data = [
+            'user_id' => $this->user_id,
             'user_money' => $user_money,
 
             'frozen_money' => 0,
@@ -136,7 +140,7 @@ class UserAccountBalance
         return RC_DB::transaction(function () use ($data) {
 
             $log_id = RC_DB::table('account_log')->insertGetId($data);
-
+           
             RC_DB::table('users')->where('user_id', $this->user_id)->increment('user_money', floatval($data['user_money']));
             RC_DB::table('users')->where('user_id', $this->user_id)->increment('frozen_money', floatval($data['frozen_money']));
 
