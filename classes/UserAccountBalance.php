@@ -140,7 +140,7 @@ class UserAccountBalance
         return RC_DB::transaction(function () use ($data) {
 
             $log_id = RC_DB::table('account_log')->insertGetId($data);
-           
+
             RC_DB::table('users')->where('user_id', $this->user_id)->increment('user_money', floatval($data['user_money']));
             RC_DB::table('users')->where('user_id', $this->user_id)->increment('frozen_money', floatval($data['frozen_money']));
 
