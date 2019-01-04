@@ -64,6 +64,7 @@
 
 					{if $account_type eq 'user_money'}
 					<th class="w150">资金变动</th>
+                    <th class="w150">冻结资金</th>
 					{else if $account_type eq 'pay_points'}
 					<th class="w150">积分变动</th>
 					{else if $account_type eq 'rank_points'}
@@ -106,6 +107,10 @@
 						<!-- {/if} -->
 					{/if}
 					</td>
+
+                    {if $account_type eq 'user_money'}
+                    <td>{$account.frozen_money}</td>
+                    {/if}
 
 					<td><a href="{RC_Uri::url('orders/admin/info')}&order_sn={$account.from_value}" target="__blank">{$account.from_value}</td>
 				</tr>
