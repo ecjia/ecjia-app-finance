@@ -118,7 +118,7 @@ class UserAccountBalance
             'user_id' => $this->user_id,
             'user_money' => $user_money,
 
-            'frozen_money' => 0,
+            'frozen_money' => -$user_money,
 
             'change_desc' => $change_desc,
             'change_time' => RC_Time::gmtime(),
