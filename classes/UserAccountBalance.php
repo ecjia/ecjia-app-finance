@@ -46,7 +46,7 @@ class UserAccountBalance
      * 账户充值
      * 向用户资金里充入余额
      */
-    public function charge($user_money, $change_desc = null, $from_type = null, $from_value = null)
+    public function charge($user_money, $change_desc = '账户充值', $from_type = null, $from_value = null)
     {
         $data = [
             'user_id' => $this->user_id,
@@ -68,7 +68,7 @@ class UserAccountBalance
      * 账户提现申请
      * 从用户的余额里划一笔金额至冻结资金里
      */
-    public function withdrawApply($user_money, $change_desc = null, $from_type = null, $from_value = null)
+    public function withdrawApply($user_money, $change_desc = '提现申请', $from_type = null, $from_value = null)
     {
         $data = [
             'user_id' => $this->user_id,
@@ -90,7 +90,7 @@ class UserAccountBalance
      * 账户提现完成
      * 将用户的冻结资金设为0
      */
-    public function withdrawSuccessful($user_money, $change_desc = null, $from_type = null, $from_value = null)
+    public function withdrawSuccessful($user_money, $change_desc = '提现成功', $from_type = null, $from_value = null)
     {
         $data = [
             'user_id' => $this->user_id,
@@ -112,7 +112,7 @@ class UserAccountBalance
      * 帐户提现取消
      * 将冻结资金再转回用户资金里
      */
-    public function withdrawCancel($user_money, $change_desc = null, $from_type = null, $from_value = null)
+    public function withdrawCancel($user_money, $change_desc = '提现取消', $from_type = null, $from_value = null)
     {
         $data = [
             'user_id' => $this->user_id,
