@@ -109,7 +109,15 @@
 					</td>
 
                     {if $account_type eq 'user_money'}
-                    <td>{$account.frozen_money}</td>
+                    <td>
+                        <!-- {if $account.frozen_money gt 0} -->
+                        <span class="ecjiafc-0000FF">+{$account.frozen_money}</span>
+                        <!-- {elseif $account.frozen_money lt 0} -->
+                        <span class="ecjiafc-red">{$account.frozen_money}</span>
+                        <!-- {else} -->
+                        {$account.frozen_money}
+                        <!-- {/if} -->
+                        </td>
                     {/if}
 
 					<td><a href="{RC_Uri::url('orders/admin/info')}&order_sn={$account.from_value}" target="__blank">{$account.from_value}</td>
