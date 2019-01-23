@@ -103,8 +103,8 @@ class admin_account_log extends ecjia_admin
             $link1 = array('text' => '充值', 'href' => RC_Uri::url('finance/admin_account/add', array('user_id' => $user_id)), 'i' => 'fontello-icon-dollar');
             $link2 = array('text' => '提现', 'href' => RC_Uri::url('withdraw/admin/add', array('user_id' => $user_id)), 'i' => 'fontello-icon-dollar');
 
-            $link3 = array('text' => '增加余额', 'href' => RC_Uri::url('finance/admin_account_log/add_user_money', array('user_id' => $user_id)), 'i' => 'fontello-icon-dollar', 'pjax' => true);
-            $link4 = array('text' => '减少余额', 'href' => RC_Uri::url('finance/admin_account_log/minus_user_money', array('user_id' => $user_id)), 'i' => 'fontello-icon-dollar', 'pjax' => true);
+            $link3 = array('text' => '增加余额', 'href' => RC_Uri::url('finance/admin_account_log/add_user_money', array('user_id' => $user_id)), 'i' => 'fontello-icon-plus', 'pjax' => true);
+            $link4 = array('text' => '减少余额', 'href' => RC_Uri::url('finance/admin_account_log/minus_user_money', array('user_id' => $user_id)), 'i' => 'fontello-icon-minus', 'pjax' => true);
 
             $second_heading = '资金明细';
 
