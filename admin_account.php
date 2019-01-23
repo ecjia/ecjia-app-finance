@@ -139,6 +139,10 @@ class admin_account extends ecjia_admin
         $this->assign('payment', $payment);
         $this->assign('form_action', RC_Uri::url('finance/admin_account/insert'));
 
+        $id   = intval($_GET['user_id']);
+        $user = get_user_info($id);
+        $this->assign('user', $user);
+
         $this->display('admin_account_edit.dwt');
     }
 
@@ -215,20 +219,20 @@ class admin_account extends ecjia_admin
 
         /* 短信告知用户账户变动 */
         if (!empty($user_info['mobile_phone'])) {
-        	$options = array(
-        			'mobile' => $user_info['mobile_phone'],
-        			'event'	 => 'sms_user_account_change',
-        			'value'  =>array(
-        					'user_name' 	=> $user_info['user_name'],
-        					'amount' 		=> $amount,
-        					'user_money' 	=> $user_info['user_money'] + $amount,
-        					'service_phone' => ecjia::config('service_phone'),
-        			),
-        	);
-        
-        	RC_Api::api('sms', 'send_event_sms', $options);
+            $options = array(
+                'mobile' => $user_info['mobile_phone'],
+                'event'  => 'sms_user_account_change',
+                'value'  => array(
+                    'user_name'     => $user_info['user_name'],
+                    'amount'        => $amount,
+                    'user_money'    => $user_info['user_money'] + $amount,
+                    'service_phone' => ecjia::config('service_phone'),
+                ),
+            );
+
+            RC_Api::api('sms', 'send_event_sms', $options);
         }
-        
+
         $account = RC_Lang::get('user::user_account.deposit');
 
         ecjia_admin::admin_log(RC_Lang::get('user::user_account.log_username') . $user_info['user_name'] . ',' . $account . $amount, 'add', 'recharge_apply');
