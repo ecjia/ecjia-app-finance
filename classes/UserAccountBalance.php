@@ -52,7 +52,7 @@ class UserAccountBalance
             'user_id'      => $this->user_id,
             'user_money'   => $user_money,
             'frozen_money' => 0,
-            'change_desc'  => __($change_desc, 'finance'),
+            'change_desc'  => $change_desc,
             'change_time'  => RC_Time::gmtime(),
             'change_type'  => AccountConstant::BALANCE_SAVING, //充值
             'from_type'    => $from_type,
@@ -72,7 +72,7 @@ class UserAccountBalance
             'user_id'      => $this->user_id,
             'user_money'   => -$user_money,
             'frozen_money' => $user_money,
-            'change_desc'  => __($change_desc, 'finance'),
+            'change_desc'  => $change_desc,
             'change_time'  => RC_Time::gmtime(),
             'change_type'  => AccountConstant::BALANCE_DRAWING, //提款
             'from_type'    => $from_type,
@@ -92,7 +92,7 @@ class UserAccountBalance
             'user_id'      => $this->user_id,
             'user_money'   => 0,
             'frozen_money' => -$user_money,
-            'change_desc'  => __($change_desc, 'finance'),
+            'change_desc'  => $change_desc,
             'change_time'  => RC_Time::gmtime(),
             'change_type'  => AccountConstant::BALANCE_DRAWING, //提款
             'from_type'    => $from_type,
@@ -112,7 +112,7 @@ class UserAccountBalance
             'user_id'      => $this->user_id,
             'user_money'   => $user_money,
             'frozen_money' => -$user_money,
-            'change_desc'  => __($change_desc, 'finance'),
+            'change_desc'  => $change_desc,
             'change_time'  => RC_Time::gmtime(),
             'change_type'  => AccountConstant::BALANCE_SAVING, //充入
             'from_type'    => $from_type,

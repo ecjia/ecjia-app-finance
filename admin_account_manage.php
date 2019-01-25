@@ -94,11 +94,11 @@ class admin_account_manage extends ecjia_admin
 
         $type = !empty($_GET['type']) ? trim($_GET['type']) : '';
 
-        $ur_here = '资金管理';
+        $ur_here     = __('资金管理', 'finance');
         $form_action = RC_Uri::url('finance/admin_account_manage/init');
 
         if ($type == 'points') {
-            $ur_here = '积分管理';
+            $ur_here     = __('积分管理', 'finance');
             $form_action = RC_Uri::url('finance/admin_account_manage/init', array('type' => 'points'));
         }
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here($ur_here));
@@ -118,7 +118,6 @@ class admin_account_manage extends ecjia_admin
         $year  = !empty($_GET['year']) ? intval($_GET['year']) : $current_year;
         $month = !empty($_GET['month']) ? intval($_GET['month']) : 0;
 
-        $this->assign('store_id', $store_id);
         $this->assign('year_list', $year_list);
         $this->assign('month_list', $month_list);
         $this->assign('year', $year);
@@ -159,11 +158,11 @@ class admin_account_manage extends ecjia_admin
     {
         $this->admin_priv('account_manage');
 
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account_manage.user_account_manage'), RC_Uri::url('finance/admin_account_manage/init')));
-        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(RC_Lang::get('user::user_account_manage.integral_order')));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('资金管理', 'finance'), RC_Uri::url('finance/admin_account_manage/init')));
+        ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('积分余额订单', 'finance')));
 
-        $this->assign('ur_here', RC_Lang::get('user::user_account_manage.integral_order'));
-        $this->assign('action_link', array('text' => RC_Lang::get('user::user_account_manage.user_account_manage'), 'href' => RC_Uri::url('finance/admin_account_manage/init')));
+        $this->assign('ur_here', __('积分余额订单', 'finance'));
+        $this->assign('action_link', array('text' => __('资金管理', 'finance'), 'href' => RC_Uri::url('finance/admin_account_manage/init')));
 
         $order_list = get_user_order($_REQUEST);
         /* 赋值到模板 */
@@ -258,7 +257,7 @@ class admin_account_manage extends ecjia_admin
         $data['user_money']            = ecjia_price_format($money_list['user_money']);
         $data['unformated_user_money'] = $money_list['user_money'];
 
-        $points = RC_DB::table('account_log')
+        $points             = RC_DB::table('account_log')
             ->select(RC_DB::raw('IFNULL(SUM(pay_points), 0) as pay_points'))
             ->where('pay_points', '!=', 0)
             ->where('from_type', 'order_give_integral')
@@ -267,7 +266,7 @@ class admin_account_manage extends ecjia_admin
             ->first();
         $data['pay_points'] = $points['pay_points'];
 
-        $points = RC_DB::table('account_log')
+        $points               = RC_DB::table('account_log')
             ->select(RC_DB::raw('IFNULL(SUM(pay_points), 0) as pay_points'))
             ->where('pay_points', '!=', 0)
             ->where('change_time', '>=', $start_date)
