@@ -65,7 +65,7 @@
                 },
                 messages: {
                     change_desc: {
-                        required: js_lang.change_desc_required
+                        required: js_lang.no_change_desc
                     }
                 },
                 submitHandler: function () {

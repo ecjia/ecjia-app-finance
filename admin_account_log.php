@@ -73,7 +73,7 @@ class admin_account_log extends ecjia_admin
         RC_Script::enqueue_script('account_log', RC_App::apps_url('statics/js/account_log.js', __FILE__));
         RC_Style::enqueue_style('admin_account_log', RC_App::apps_url('statics/css/admin_account_manage.css', __FILE__), array());
 
-        RC_Script::localize_script('admin_account_log', 'js_lang', config('app-finance::jslang.admin_account_log_page'));
+        RC_Script::localize_script('account_log', 'js_lang', config('app-finance::jslang.admin_account_log_page'));
 
         ecjia_screen::get_current_screen()->add_nav_here(new admin_nav_here(__('会员列表', 'finance'), RC_Uri::url('user/admin/init')));
     }
