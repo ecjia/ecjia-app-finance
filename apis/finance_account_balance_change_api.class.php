@@ -50,7 +50,8 @@ defined('IN_ECJIA') or exit('No permission resources.');
  * 会员帐号资金变动日志记录接口
  * @author royalwang
  */
-class finance_account_balance_change_api extends Component_Event_Api {
+class finance_account_balance_change_api extends Component_Event_Api
+{
 
     /**
      * @param integer user_id       必填，用户ID
@@ -61,49 +62,50 @@ class finance_account_balance_change_api extends Component_Event_Api {
      *
      * @return ecjia_error|void
      */
-    public function call(&$options) {
-        if (!array_get($options, 'user_id') ||  !array_get($options, 'user_money') || !array_get($options, 'change_desc')) {
-            return new ecjia_error('invalid_parameter', '请求接口user_account_balance_change_api参数无效');
+    public function call(&$options)
+    {
+        if (!array_get($options, 'user_id') || !array_get($options, 'user_money') || !array_get($options, 'change_desc')) {
+            return new ecjia_error('invalid_parameter', sprintf(__('请求接口%s参数无效', 'finance'), 'user_account_balance_change_api'));
         }
-        
-        $user_id 			= array_get($options, 'user_id');
-        $user_money 		= array_get($options, 'user_money');
-        $frozen_money 		= array_get($options, 'frozen_money', 0);
-        $change_desc 		= array_get($options, 'change_desc');
-        $change_type 		= array_get($options, 'change_type', ACT_ACTIVITY);
-        $from_type			= array_get($options, 'from_type', '');
-        $from_value			= array_get($options, 'from_value', '');
-        
+
+        $user_id      = array_get($options, 'user_id');
+        $user_money   = array_get($options, 'user_money');
+        $frozen_money = array_get($options, 'frozen_money', 0);
+        $change_desc  = array_get($options, 'change_desc');
+        $change_type  = array_get($options, 'change_type', ACT_ACTIVITY);
+        $from_type    = array_get($options, 'from_type', '');
+        $from_value   = array_get($options, 'from_value', '');
+
         return $this->log_account_change($user_id, $user_money, $frozen_money, $change_desc, $change_type, $from_type, $from_value);
     }
-    
-    
+
+
     /**
      * 记录帐户变动
      *
-     * @param int $user_id          用户id
-     * @param float $user_money     可用余额变动
-     * @param float $frozen_money   冻结余额变动
-     * @param int $rank_points      成长值变动
-     * @param int $pay_points       消费积分变动
-     * @param string $change_desc   变动说明
-     * @param int $change_type      变动类型：参见常量文件
+     * @param int $user_id 用户id
+     * @param float $user_money 可用余额变动
+     * @param float $frozen_money 冻结余额变动
+     * @param int $rank_points 成长值变动
+     * @param int $pay_points 消费积分变动
+     * @param string $change_desc 变动说明
+     * @param int $change_type 变动类型：参见常量文件
      * @return void
      */
     private function log_account_change($user_id, $user_money = 0, $frozen_money = 0, $change_desc = '', $change_type = ACT_OTHER, $from_type = '', $from_value = '')
     {
-    	/* 插入帐户变动记录 */
-        $account_log = array (
-            'user_id'			=> $user_id,
-            'user_money'		=> $user_money,
-            'frozen_money'		=> $frozen_money,
-            'rank_points'		=> 0,
-            'pay_points'		=> 0,
-            'change_time'		=> RC_Time::gmtime(),
-            'change_desc'		=> $change_desc,
-            'change_type'		=> $change_type,
-        	'from_type'			=> $from_type,
-        	'from_value'		=> $from_value
+        /* 插入帐户变动记录 */
+        $account_log = array(
+            'user_id'      => $user_id,
+            'user_money'   => $user_money,
+            'frozen_money' => $frozen_money,
+            'rank_points'  => 0,
+            'pay_points'   => 0,
+            'change_time'  => RC_Time::gmtime(),
+            'change_desc'  => $change_desc,
+            'change_type'  => $change_type,
+            'from_type'    => $from_type,
+            'from_value'   => $from_value
         );
 
 
