@@ -379,7 +379,10 @@ function get_account_log_list($user_id, $account_type = '', $date = [])
 
     if (in_array($account_type, array('user_money', 'frozen_money', 'rank_points', 'pay_points'))) {
         if ($account_type == 'user_money') {
-            $db_account_log->where('user_money', '!=', 0)->orWhere('frozen_money', '!=', 0);
+            $db_account_log->where(function ($query) {
+                $query->where('user_money', '!=', 0)
+                    ->orWhere('frozen_money', '!=', 0);
+            });
         } else {
             $db_account_log->where($account_type, '!=', 0);
         }
