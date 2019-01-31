@@ -88,6 +88,10 @@ class admin_account_log extends ecjia_admin
         $user_id      = intval($_GET['user_id']);
         $account_type = trim($_GET['account_type']);
 
+        if(empty($user_id)) {
+            return $this->showmessage('参数异常', ecjia::MSGTYPE_HTML | ecjia::MSGSTAT_ERROR);
+        }
+
         $this->assign('form_action', RC_Uri::url('finance/admin_account_log/init', array('account_type' => $account_type, 'user_id' => $user_id)));
         $this->assign('back_link', array('text' => __('会员列表', 'finance'), 'href' => RC_Uri::url('user/admin/init')));
 
